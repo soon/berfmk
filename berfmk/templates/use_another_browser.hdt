@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta charset="utf-8"><title>Пожалуйста, смените браузер</title>
+    </head>
+    <body>
+        К сожалению, браузер Internet Explorer не может грамотно отображать наш
+        сайт.
+        <br>
+        Поэтому поддержка этого браузера была отключена
+        <br>
+        Настоятельно рекомендуем использовать один из следующих браузеров:
+        <ul>
+            <li><a href="https://www.google.com/intl/en/chrome/browser/">Google
+            Chrome</li>
+            <li><a href="http://www.chromium.org/Home">Chromium Browser</a></li>
+            <li><a href="http://www.mozilla.org/en-US/">Mozilla Firefox</a></li>
+            <li><a href="http://www.apple.com/ru/safari/download/">Apple
+            Safari</a></li>
+            <li><a href="http://www.opera.com/">Opera Browser</a></li>
+        </ul>
+    </body>
+</html>

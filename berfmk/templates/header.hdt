@@ -1,0 +1,65 @@
+<div id="logo"><a href="/"></a></div>
+<div id="userpanel">
+    <ul class="reset">
+        {% if user.is_authenticated %}
+            <!-- Messages block -->
+            <!--
+            <li id="messages">
+                    <a {% if new_messages %}id="new"{% endif %} href="#" title="Уведомления"></a>
+                    <ul class="reset">
+                        <li class="new"><a href="#" title="Сообщения">Сообщения</a></li>
+                        <li><a href="#" title="Комментарии">Комментарии</a></li>
+                    </ul>
+            </li>
+            -->
+            <!-- END Messages block -->
+            <!-- User profile block -->
+            <li id="userprofile">
+                <a href="#">
+                    <span id="nickname">{{ user.username }}&nbsp</span>
+                    <img src="{{ STATIC_PREFIX }}images/userpanel/avatar.png">
+                </a>
+                <div id="card">
+                    <div id="avatar">
+                        <a href="#">
+                            <img src="{{ STATIC_PREFIX }}images/userpanel/avatar.png">
+                        </a>
+                    </div>
+                    <div id="nickname">{{ user.username }}</div>
+                    <div id="user_group">{{ user.get_profile.group.name }}</div>
+                    <div id="logout"><a href="/logout">Выход</a></div>
+                </div>
+            </li>
+        {% else %}
+            <li class="button">
+                <a href="/login">Войти</a>
+            </li>
+            <li class="button">
+                <a href="/register">Регистрация</a>
+            </li>
+        {% endif %}
+        <!-- END user profile block -->
+    <ul>
+</div>
+<div id="menu">
+    <ul class="reset">
+        <li>
+            <a href="/news">Новости</a>
+            <ul class="reset">
+                <li><a href="/news/school">Новости школы</a></li>
+                <li><a href="/news/site">Новости сайта</a></li>
+            </ul>
+        </li>
+        <!--
+        <li>
+            <a href="#">Разделы</a>
+            <ul class="reset">
+                <li><a href="#">First</a></li>
+                <li><a href="#">Scond</a></li>
+                <li><a href="#">Third</a></li>
+                <li><a href="#">Fourth</a></li>
+            </ul>
+        </li>
+        -->
+    </ul>
+</div>

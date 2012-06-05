@@ -1,0 +1,119 @@
+{% extends "main.hdt" %}
+
+{% block title %}Добавить новость{% endblock %}
+
+{% load bb_to_html %}
+
+{% block content %}
+<div id="content">
+    {% if news %}
+        <div class="border">
+            <div class="title">
+                {{ news.title }}
+            </div>
+            <div class="content_html_format">
+                {% autoescape off %}
+                    {{ news.text_block|force_escape|bb_to_html }}
+                {% endautoescape %}
+            </div>
+        </div>
+    {% endif %}
+    <div class="border">
+        <div class="title">
+            Добавить новость
+        </div>
+        <form action="/news/add/" method="post">
+            {% csrf_token %}
+            <ul class="reset input_form">
+                <li class="input_block">
+                    <label for="input_title" class="input_title">
+                        Заголовок
+                    </label>
+                    <br>
+                    <input  id="input_title"
+                            class="full_width"
+                            type="text"
+                            name="input_title"
+                            maxlength="100"
+                            tabindex="1"
+                            value="{{ news_title }}"
+                            required
+                            placeholder="Ежики плакали и кололись, но продолжали кушать кактус">
+                    {% if errors.title %}
+                        <div class="error_message">
+                            Слишком длинный заголовок
+                        </div>
+                    {% endif %}     
+                </li>
+                <li class="input_block">
+                    <label for="input_text_block" class="input_title">
+                        Новость
+                    </label>
+                    <br>
+                    <textarea   id="input_text_block"
+                                class="full_width"
+                                type="textarea"
+                                name="input_text_block"
+                                maxlength="1000"
+                                rows = "20"
+                                tabindex="2"
+                                required
+                                placeholder="Какие глупые ежики">{{news_text_block }}</textarea>
+                    {% if errors.text_block %}
+                        <div class="error_message">
+                            Вам не хватило 1000 символов?
+                        </div>
+                    {% endif %}     
+                </li>
+            </ul>
+            <ul class="reset input_form">
+                {% if perms.news.add_news %}
+                <li class="input_block">
+                    <input  type="radio"
+                            id="all"
+                            name="radiobutton"
+                            checked="checked"
+                            value="all"
+                            tabindex="5">
+                    <label for="all" class="input_title">
+                        Общая новость
+                    </label>
+                </li>
+                {% endif %}
+                {% if perms.news.add_sitenews %}
+                <li class="input_block">
+                    <input  type="radio"
+                            id="site"
+                            name="radiobutton"
+                            value="site"
+                            tabindex="6">
+                    <label for="site" class="input_title">
+                        Новость только для сайта
+                    </label>
+                </li>
+                {% endif %}
+                {% if perms.news.add_schoolnews %}
+                <li class="input_block">
+                    <input  type="radio"
+                            id="school"
+                            name="radiobutton"
+                            value="school"
+                            tabindex="7">
+                    <label for="school" class="input_title">
+                        Новость только для школы
+                    </label>
+                </li>
+                {% endif %}
+            </ul>
+            <br>
+            <fieldset class="submit">
+                <input type="submit" value="Опубликовать" tabindex="10">
+                <input  type="submit" 
+                        value="Предпросмотр" 
+                        tabindex="11"
+                        formaction="/news/preview/">
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}

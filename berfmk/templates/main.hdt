@@ -1,0 +1,23 @@
+{% if "MSIE" in request.META.HTTP_USER_AGENT %}
+    {% include "use_another_browser.hdt" %}
+{% else %}
+    {% load static %}
+    {% get_static_prefix as STATIC_PREFIX %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Физ Мат Березники | {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/style.css" type="text/css" media="all" charset="utf-8">
+    </head>
+    <body>
+        <header>
+            {% include "header.hdt" %}
+        </header>
+        {% block content %}{% endblock %}
+        <footer>
+            {% include "footer.hdt" %}
+        </footer>
+    </body>
+    </html>
+{% endif %}

@@ -1,0 +1,3 @@
+{% extends "main.hdt" %}
+
+{% block title %}Физ Мат Березники | {{ page_name }}{% endblock %}

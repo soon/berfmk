@@ -1,0 +1,54 @@
+{% extends "main.hdt" %}
+
+{% block title %}Новости{{ direction }}: Страница {{ page }}{% endblock %}
+
+{% load bb_to_html %}
+
+{% block content %}
+<div id="content">
+    {% if can_add %}
+        <div class="button">
+            <a href="/news/add/">
+                Добавить новость
+            </a>
+        </div>
+    {% endif %}
+    {% for n in news %}
+        <div class="border">
+            <div class="title">
+                <a href="/news/{{ n.id }}/">
+                    {{ n.title }}
+                </a>
+            </div>
+            <div class="content_html_format">
+                {% autoescape off %}
+                    {{ n.text_block|force_escape|bb_to_html }}
+                {% endautoescape %}
+            </div>
+            <!-- 
+            <div class="goto_cut">
+                <a href="#">Читать далее</a>
+            </div>-->
+            <ul class="bottom reset">
+                <li>
+                    <ul class="infopanel reset">
+                        <li class="author">
+                            {{ n.author.username }}
+                        </li>
+                        <li class="date">
+                            {{ n.last_change|date:"D, d M Y H:i"  }}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            {% if n.schoolNews and perms.news.change_schoolnews or n.siteNews and perms.news.change_sitenews or not n.siteNews and not n.schoolNews and perms.news.change_news %}
+                <div class="button">
+                    <a href="/news/{{n.id}}/edit/">
+                        Редактировать
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

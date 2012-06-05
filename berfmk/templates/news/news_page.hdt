@@ -1,0 +1,39 @@
+{% extends "main.hdt" %}
+
+{% block title %}{{ news.title }}{% endblock %}
+
+{% load bb_to_html %}
+
+{% block content %}
+<div id="content">
+    <div class="border">
+        <div class="title">
+            {{ news.title }}
+        </div>
+        <div class="content_html_format">
+            {% autoescape off %}
+                {{ news.text_block|force_escape|bb_to_html }}
+            {% endautoescape %}
+        </div>
+        <ul class="bottom reset">
+            <li>
+                <ul class="infopanel reset">
+                    <li class="author">
+                        {{ news.author.username }}
+                    </li>
+                    <li class="date">
+                        {{ news.last_change|date:"D, d M Y H:i"  }}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        {% if news.schoolNews and perms.news.change_schoolnews or news.siteNews and perms.news.change_sitenews or not news.siteNews and not news.schoolNews and perms.news.change_news %}
+            <div class="button">
+                <a href="/news/{{ news.id }}/edit/">
+                    Редактировать
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
