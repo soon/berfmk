@@ -3,6 +3,7 @@
 {% block title %}{{ news.title }}{% endblock %}
 
 {% load bb_to_html %}
+{% load i18n %}
 
 {% block content %}
 <div id="content">
@@ -22,7 +23,9 @@
                         {{ news.author.username }}
                     </li>
                     <li class="date">
-                        {{ news.last_change|date:"D, d M Y H:i"  }}
+                        {% with news.last_change|date:"D, d M Y H:i" as d %}
+                        {% trans d %}
+                        {% endwith %}
                     </li>
                 </ul>
             </li>

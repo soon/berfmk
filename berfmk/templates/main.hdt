@@ -1,4 +1,4 @@
-{% if "MSIE" in request.META.HTTP_USER_AGENT %}
+{% if "MSIE" in request.META.HTTP_USER_AGENT and "MSIE 9." not in request.META.HTTP_USER_AGENT %}
     {% include "use_another_browser.hdt" %}
 {% else %}
     {% load static %}
