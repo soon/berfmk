@@ -6,13 +6,12 @@ from django.conf                    import settings
 from django.http                    import Http404
 #-------------------------------------------------------------------------------
 from news.models                    import News
+from news.utils                     import get_news_or_404
+from news.utils                     import get_number_from_param_or_404
 #-------------------------------------------------------------------------------
 def news(request, direction, page):
-    try:
-        page = int(page)
-    except ValueError:
-        raise Http404()
-
+    page = get_number_from_param_or_404(page)
+    
     schoolNews, siteNews = False, False
     part_of_title = ''
     if direction == 'site/':
@@ -25,10 +24,15 @@ def news(request, direction, page):
         raise Http404()
     # NOTE
     # Может быть сделать отдельную страницу для пустых страниц
+    # soon(30.08.12, 11:04)
+    # Что я хотел себе этим сказать - непонятно
     news = News.objects.all()
-    if siteNews or schoolNews:
-        news = news.filter(schoolNews = schoolNews, siteNews = siteNews)
-    if len(news) <= (page - 1) * 10 and len(news):
+    if(schoolNews):
+        news = news.filter(schoolNews = schoolNews)
+    elif(siteNews):
+        news = news.filter(siteNews = siteNews)
+
+    if news.count() <= (page - 1) * 10 and news.count():
         raise Http404()
 
     can_add = request.user.has_perm('news.add_{0}news'.format(direction[:-1]))
@@ -45,19 +49,21 @@ def news(request, direction, page):
 #-------------------------------------------------------------------------------
 def add_news(request, preview = False):
     # FIXME
-    # Если послать поддельный POST, то юзер без 
-    # прав(на определенный раздел) сможет 
-    # добавить новость
+    # Если послать поддельный POST, то юзер без прав(на определенный раздел) 
+    # сможет добавить новость
+    # soon(30.08.12, 11:06)
+    # Или не сможет.
     if not (
             request.user.has_perm('news.add_news') or \
             request.user.has_perm('news.add_schoolnews') or \
             request.user.has_perm('news.add_sitenews')
-        ):
+    ):
         raise Http404()
     # FIXME:
     # Если длинна будет нулевая
-    errors = {'title': False, 'text_block': False}
     if request.method == 'POST':
+        errors = {'title': False, 'text_block': False}
+
         title = request.POST['input_title']
         if len(title) > 100:
             errors['title'] = True
@@ -66,79 +72,73 @@ def add_news(request, preview = False):
         if len(text_block) > 1000:
             errors['text_block'] = True
 
-        news_for = request.POST['radiobutton']
-        if news_for not in ['all', 'site', 'school']:
-            print '/news/add/ : news_for not in ["all", "site", "school"]'
-            return direct_to_template(
-                    request,
-                    'news/add_news.hdt', {
-                        'news_title': title,
-                        'news_text_block': text_block
-                    }
-                )
-        schoolNews = news_for == 'school'
-        siteNews = news_for = 'site'
-
+        # news_for = request.POST['checkbox']
+        # if news_for not in ['all', 'site', 'school']:
+        #     print '/news/add/ : news_for not in ["all", "site", "school"]'
+        #     return direct_to_template(
+        #             request,
+        #             'news/add_news.hdt', {
+        #                 'news_title': title,
+        #                 'news_text_block': text_block
+        #             }
+        #         )
+        # schoolNews = news_for == 'school'
+        # siteNews = news_for = 'site'
 
         news = None
 
         if not True in errors.values():
-            schoolNews, siteNews = False, False
-            if news_for == 'site':
-                siteNews = True
-            elif news_for == 'school':
-                schoolNews = True
+            # schoolNews, siteNews = False, False
+            # if news_for == 'site':
+            #     siteNews = True
+            # elif news_for == 'school':
+            #     schoolNews = True
             news = News(
-                    title = title,
-                    text_block = text_block,
-                    author = request.user,
-                    schoolNews = schoolNews,
-                    siteNews = siteNews
-                )
+                title       = title,
+                text_block  = text_block,
+                author      = request.user,
+                schoolNews  = 'school' in request.POST.keys(),
+                siteNews    = 'site' in request.POST.keys()
+            )
             if not preview:
                 news.save()
                 return redirect('/news/{0}'.format(news.id))
         return direct_to_template(
-                request,
-                'news/add_news.hdt', { 
-                    'news_title': title,
-                    'news_text_block': text_block,
-                    'news': news
-                }
-            )
+            request,
+            'news/add_news.hdt', { 
+                'news_title'        : title,
+                'news_text_block'   : text_block,
+                'news'              : news,
+                'errors'            : errors
+
+            }
+        )
     else:
         return direct_to_template(request, 'news/add_news.hdt')
 #-------------------------------------------------------------------------------
 def news_page(request, id):
-    try:
-        id = int(id)
-        news = News.objects.get(id = id)
-        return direct_to_template(
-                request,
-                'news/news_page.hdt', {
-                    'news': news
-                }
-            )
-    except News.DoesNotExist, ValueError:
-        raise Http404()
+    news = get_news_or_404(id)
+    return direct_to_template(
+        request,
+        'news/news_page.hdt', {
+            'news': news
+        }
+    )
 #-------------------------------------------------------------------------------
 def edit_news(request, id, preview = False):
     # FIXME
-    # Если послать поддельный POST, то юзер без 
-    # прав(на определенный раздел) сможет 
-    # добавить новость
+    # Если послать поддельный POST, то юзер без прав(на определенный раздел) 
+    # сможет добавить новость
+    # soon(30.08.12, 11:11)
+    # См. выше
     if not (
             request.user.has_perm('news.change_news') or \
             request.user.has_perm('news.change_schoolnews') or \
             request.user.has_perm('news.change_sitenews')
         ):
         raise Http404()
-    news = None
-    try:
-        id = int(id)
-        news = News.objects.get(id = id)
-    except News.DoesNotExist, ValueError:
-        raise Http404()
+
+    news = get_news_or_404(id)
     # FIXME:
     # Если длинна будет нулевая
     if request.method == 'POST':
@@ -148,43 +148,46 @@ def edit_news(request, id, preview = False):
             errors['title'] = True
 
         text_block = request.POST['input_text_block']
+        print text_block
         if len(text_block) > 1000:
             errors['text_block'] = True
 
-        news_for = request.POST['radiobutton']
-        if news_for not in ['all', 'site', 'school']:
-            print '/news/edit/ : news_for not in ["all", "site", "school"]'
-            return direct_to_template(
-                    request,
-                    'news/edit_news.hdt', {
-                        'news': news,
-                        'news_title': title,
-                        'news_text_block': text_block
-                    }
-                )
-        schoolNews = news_for == 'school'
-        siteNews = news_for = 'site'
+        # news_for = request.POST['radiobutton']
+        # if news_for not in ['all', 'site', 'school']:
+        #     print '/news/edit/ : news_for not in ["all", "site", "school"]'
+        #     return direct_to_template(
+        #             request,
+        #             'news/edit_news.hdt', {
+        #                 'news': news,
+        #                 'news_title': title,
+        #                 'news_text_block': text_block
+        #             }
+        #         )
+        # schoolNews = news_for == 'school'
+        # siteNews = news_for = 'site'
 
         if not True in errors.values():
+            schoolNews = 'school' in request.POST.keys()
+            siteNews = 'site' in request.POST.keys()
             if not preview:
-                news.title, news.text_block, news.schoolNews, \
-                news.siteNews = title, text_block, schoolNews, \
-                siteNews
+                news.title, news.text_block, news.schoolNews, news.siteNews = \
+                title,      text_block,         schoolNews,     siteNews
                 news.save()
                 return redirect('/news/{0}/'.format(id))
         return direct_to_template(
-                request,
-                'news/edit_news.hdt', {
-                    'news': news,
-                    'news_title': title,
-                    'news_text_block': text_block
-                }
-            )
+            request,
+            'news/edit_news.hdt', {
+                'news'              : news,
+                'news_title'        : title,
+                'news_text_block'   : text_block,
+                'errors'            : errors
+            }
+        )
     else:
         return direct_to_template(
-                request,
-                'news/edit_news.hdt', {
-                    'news': news
-                }
-            )
+            request,
+            'news/edit_news.hdt', {
+                'news': news
+            }
+        )
         

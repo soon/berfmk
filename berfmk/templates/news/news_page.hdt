@@ -2,8 +2,9 @@
 
 {% block title %}{{ news.title }}{% endblock %}
 
-{% load bb_to_html %}
+{% load markdown_to_html %}
 {% load i18n %}
+{% load comments %}
 
 {% block content %}
 <div id="content">
@@ -13,7 +14,7 @@
         </div>
         <div class="content_html_format">
             {% autoescape off %}
-                {{ news.text_block|force_escape|bb_to_html }}
+                {{ news.text_block|force_escape|markdown_to_html }}
             {% endautoescape %}
         </div>
         <ul class="bottom reset">
@@ -37,6 +38,15 @@
                 </a>
             </div>
         {% endif %}
+    </div>
+    <div class="border">
+        <div class="title">
+            {% get_comment_count for news as comment_count %}
+            Комментариев: {{ comment_count }}
+        </div>
+        <div class="border">
+            asd
+        </div>
     </div>
 </div>
 {% endblock %}

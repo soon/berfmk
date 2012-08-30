@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
-from django.views.generic.simple    import direct_to_template
 from django.shortcuts               import redirect
+from django.views.generic.simple    import direct_to_template
+from django.conf                    import settings
+from django.http                    import Http404
 #-------------------------------------------------------------------------------
-def login(request):
-    if request.user.is_authenticated():
-        return redirect('/')
-    else:
-        return direct_to_template(request, 'user/login.hdt')
+from art.models                     import Art
 #-------------------------------------------------------------------------------
-def register(request):
-    if request.user.is_authenticated():
-        return redirect('/')
-    else:
-        return direct_to_template(request, 'user/register.hdt')
+def art_page(request, name):
+    pass
+#     try:
+#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------

@@ -1,0 +1,81 @@
+{% extends "main.hdt" %}
+
+{% block title %}Форум: тема "{{ topic.title }}"{% endblock %}
+
+{% load markdown_to_html %}
+{% load product %}
+
+{% block content %}
+<div id="content">
+    {% for post in posts %}
+        <div class="border" id="post{{ post.id }}">
+                <div class="title">
+                    <a href="{{ post.get_absolute_url }}">
+
+                        {% if not forloop.first %}
+                            #{{ post.number }} Re: 
+                        {% endif %}
+                        {{ topic.title }}
+                    </a>
+                </div>
+                <div class="content_html_format">
+                    {% autoescape off %}
+                        {{ post.body|force_escape|markdown_to_html }}
+                    {% endautoescape %}
+                </div>
+            <ul class="bottom reset">
+                <li>
+                    <ul class="infopanel reset">
+                        <li class="author">
+                            {{ post.creator }}
+                        </li>
+                        <li class="date">
+                            {{ post.created|date:"D, d M Y H:i"  }}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    {% endfor %}
+    {% if perms.post.can_add %}
+        <div class="border">
+            <div class="title">
+                Новое сообщение
+            </div>
+            <form action="{{ topic.get_absolute_url }}add-post/" method="post">
+                {% csrf_token %}
+                <ul class="reset input_form">
+                    <li class="input_block">
+                        <label for="input_text_block" class="input_title">
+                            Текст сообщения
+                        </label>
+                        <br>
+                        <textarea   id="input_text_block"
+                                    class="full_width"
+                                    type="textarea"
+                                    name="input_body"
+                                    maxlength="1000"
+                                    rows = "8"
+                                    tabindex="2"
+                                    required
+                                    placeholder="Не более 1000 символов">{% firstof post_body post.body %}</textarea>
+                        {% if errors.body %}
+                            <div class="error_message">
+                                Слишком длинное сообщение
+                            </div>
+                        {% endif %}     
+                    </li>
+                </ul>
+                <br>
+                <fieldset class="submit">
+                    <input type="submit" value="Добавить" tabindex="10">
+                    <input  type="submit" 
+                            value="Предпросмотр" 
+                            tabindex="11"
+                            formaction="{{ topic.get_absolute_url }}add-post/preview/">
+                </fieldset>
+            </form>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

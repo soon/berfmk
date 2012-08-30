@@ -1,0 +1,24 @@
+{% extends "main.hdt" %}
+
+{% block title %}Форум "{{ forum.title }}"{% endblock %}
+
+{% block content %}
+<div id="content">
+    {% for section in sections %}
+        <div class="border">
+            <div class="title">
+                <a href="{{ section.get_absolute_url }}">
+                    {{ section.title }}
+                </a>
+            </div>
+            {% for sub_section in section.sub_section_set.all %}
+                <div class="line">
+                    <a href="{{ sub_section.get_absolute_url }}">
+                        {{ sub_section.title }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

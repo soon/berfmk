@@ -1,0 +1,27 @@
+{% extends "main.hdt" %}
+
+{% block title %}Форум: подраздел "{{ sub_section.title }}"{% endblock %}
+
+{% block content %}
+<div id="content">
+    {% if perms.topic.can_add and perms.post.can_add %}
+        <div class="button">
+            <a href="/forum/{{ forum.address }}/{{ sub_section.address }}/add-topic">
+                Создать новую тему
+            </a>
+        </div>
+    {% endif %}
+    {% if topics %}
+        <div class="border">
+            <div class="title">Темы</div>
+            {% for topic in topics %}
+                <div class="line">
+                    <a href="{{ topic.get_absolute_url }}">
+                        {{ topic.title }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
