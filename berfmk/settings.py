@@ -122,7 +122,7 @@ ROOT_URLCONF = 'berfmk.urls'
 WSGI_APPLICATION = 'berfmk.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/home/soon/Src/Django/berfmk/art/templates',
+    # '/home/soon/Src/Django/berfmk/art/templates', 
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
