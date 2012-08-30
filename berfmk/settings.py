@@ -111,6 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'berfmk.middleware.exception.ExceptionLoggingMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -121,6 +122,7 @@ ROOT_URLCONF = 'berfmk.urls'
 WSGI_APPLICATION = 'berfmk.wsgi.application'
 
 TEMPLATE_DIRS = (
+    '/home/soon/Src/Django/berfmk/art/templates',
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -134,10 +136,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.comments',
+    'django.contrib.markup',
     'berfmk',
     'south',
     'accounts',
     'news',
+    'forum',
+    #'art',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

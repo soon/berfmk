@@ -2,7 +2,7 @@
 
 {% block title %}Новости{{ direction }}: Страница {{ page }}{% endblock %}
 
-{% load bb_to_html %}
+{% load markdown_to_html %}
 
 {% block content %}
 <div id="content">
@@ -16,13 +16,14 @@
     {% for n in news %}
         <div class="border">
             <div class="title">
+                {# TODO: make it with get_absolute_url #}
                 <a href="/news/{{ n.id }}/">
                     {{ n.title }}
                 </a>
             </div>
             <div class="content_html_format">
                 {% autoescape off %}
-                    {{ n.text_block|force_escape|bb_to_html }}
+                    {{ n.text_block|force_escape|markdown_to_html }}
                 {% endautoescape %}
             </div>
             <!-- 

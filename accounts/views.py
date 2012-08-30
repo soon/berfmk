@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-
+#-------------------------------------------------------------------------------
 from django.views.generic.simple    import direct_to_template
 from django.shortcuts               import redirect
 from django.contrib                 import auth
 from django.contrib.auth            import logout as user_logout
 from django.contrib.auth.models     import User
-
+#-------------------------------------------------------------------------------
 import re
-
+#-------------------------------------------------------------------------------
 def login(request):
     if request.user.is_authenticated():
         return redirect('/')
@@ -28,12 +28,12 @@ def login(request):
                 )
     else:
         return direct_to_template(request, 'user/login.hdt')
-
+#-------------------------------------------------------------------------------
 def logout(request):
     if request.user.is_authenticated():
         user_logout(request)
     return redirect('/')
-
+#-------------------------------------------------------------------------------
 def register(request):
     if request.user.is_authenticated():
         return redirect('/')
@@ -89,3 +89,4 @@ def register(request):
                 )
     else:
         return direct_to_template(request, 'user/register.hdt')
+#-------------------------------------------------------------------------------

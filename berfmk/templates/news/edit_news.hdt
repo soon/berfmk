@@ -2,7 +2,7 @@
 
 {% block title %}Редактировать новость{% endblock %}
 
-{% load bb_to_html %}
+{% load markdown_to_html %}
 
 {% block content %}
 <div id="content">
@@ -14,9 +14,7 @@
         </div>
         <div class="content_html_format">
             {% autoescape off %}
-                {% filter force_escape|bb_to_html %}
-                    {% firstof news_text_block news.text_block %}
-                {% endfilter %}
+                {% filter force_escape|markdown_to_html %}{% firstof news_text_block news.text_block %}{% endfilter %}
             {% endautoescape %}
         </div>
     </div>
@@ -40,7 +38,7 @@
                             tabindex="1"
                             value="{% firstof news_title news.title %}"
                             required
-                            placeholder="Ежики плакали и кололись, но продолжали кушать кактус">
+                            placeholder="Не более 100 символов">
                     {% if errors.title %}
                         <div class="error_message">
                             Слишком длинный заголовок
@@ -60,7 +58,7 @@
                                 rows = "20"
                                 tabindex="2"
                                 required
-                                placeholder="Какие глупые ежики">{% firstof news_text_block news.text_block %}</textarea>
+                                placeholder="Не более 1000 символов">{% firstof news_text_block news.text_block %}</textarea>
                     {% if errors.text_block %}
                         <div class="error_message">
                             Вам не хватило 1000 символов?
@@ -69,40 +67,33 @@
                 </li>
             </ul>
             <ul class="reset input_form">
-                {% if perms.news.add_news %}
-                <li class="input_block">
-                    <input  type="radio"
-                            id="all"
-                            name="radiobutton"
-                            checked="checked"
-                            value="all"
-                            tabindex="5">
-                    <label for="all" class="input_title">
-                        Общая новость
-                    </label>
-                </li>
-                {% endif %}
                 {% if perms.news.add_sitenews %}
                 <li class="input_block">
-                    <input  type="radio"
+                    <input  type="checkbox"
                             id="site"
-                            name="radiobutton"
+                            name="site"
                             value="site"
-                            tabindex="6">
+                            tabindex="6"
+                            {% if not news or news.siteNews %}
+                                checked
+                            {% endif %}>
                     <label for="site" class="input_title">
-                        Новость только для сайта
+                        Новость для сайта
                     </label>
                 </li>
                 {% endif %}
                 {% if perms.news.add_schoolnews %}
                 <li class="input_block">
-                    <input  type="radio"
+                    <input  type="checkbox"
                             id="school"
-                            name="radiobutton"
+                            name="school"
                             value="school"
-                            tabindex="7">
+                            tabindex="7"
+                            {% if not news or news.schoolNews %}
+                                checked
+                            {% endif %}>
                     <label for="school" class="input_title">
-                        Новость только для школы
+                        Новость для школы
                     </label>
                 </li>
                 {% endif %}
