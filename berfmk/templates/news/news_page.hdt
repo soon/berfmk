@@ -39,7 +39,7 @@
             </div>
         {% endif %}
     </div>
-    <div class="border">
+    <!--<div class="border">
         <div class="title">
             {% get_comment_count for news as comment_count %}
             Комментариев: {{ comment_count }}
@@ -47,6 +47,6 @@
         <div class="border">
             asd
         </div>
-    </div>
+    </div>-->
 </div>
 {% endblock %}

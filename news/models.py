@@ -11,9 +11,18 @@ class News(models.Model):
     schoolNews  = models.BooleanField(default = False)
     siteNews    = models.BooleanField(default = False)
     #---------------------------------------------------------------------------
-    def __unicode__(self):
-        return self.title
-    #---------------------------------------------------------------------------
     class Meta:
         ordering = ['-last_change']
+        #-----------------------------------------------------------------------
+        permissions = (
+            (     'add_sitenews',   'Can add sitenews'      ),
+            (   'add_schoolnews',   'Can add schoolnews'    ),
+            (  'change_sitenews',   'Can change sitenews'   ),
+            ('change_schoolnews',   'Can change schoolnews' ),
+            (  'delete_sitenews',   'Can delete sitenews'   ),
+            ('delete_schoolnews',   'Can delete schoolnews' ),
+        )
+    #---------------------------------------------------------------------------
+    def __unicode__(self):
+        return self.title
 #-------------------------------------------------------------------------------
