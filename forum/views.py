@@ -121,7 +121,7 @@ def posts(request, forum, section, topic, page):
         )
 #-------------------------------------------------------------------------------
 def add_topic(request, forum, section, preview):
-    if not request.user.has_perm('topic.add_topic'):
+    if not request.user.has_perm('forum.add_topic'):
         raise Http404()
 
     f = get_object_or_404(Forum, address = forum)
@@ -197,7 +197,7 @@ def add_topic(request, forum, section, preview):
         )
 #-------------------------------------------------------------------------------
 def add_post(request, forum, section, topic, preview):
-    if not request.user.has_perm('post.add_post'):
+    if not request.user.has_perm('forum.add_post'):
         raise Http404()
 
     topic = get_number_from_param_or_404(topic)

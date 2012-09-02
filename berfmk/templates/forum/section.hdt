@@ -19,7 +19,7 @@
         </div>
         <br>
     {% endif %}
-    {% if perms.topic.can_add and perms.post.can_add %}
+    {% if perms.forum.add_topic and perms.forum.add_post %}
         <div class="button">
             <a href="/forum/{{ forum.address }}/{{ section.address }}/add-topic">
                 Создать новую тему

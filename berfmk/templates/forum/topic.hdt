@@ -37,7 +37,7 @@
             </ul>
         </div>
     {% endfor %}
-    {% if perms.post.can_add %}
+    {% if perms.forum.add_post %}
         <div class="border">
             <div class="title">
                 Новое сообщение
