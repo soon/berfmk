@@ -14,42 +14,58 @@
         </div>
     {% endif %}
     {% for n in news %}
-        <div class="border">
-            <div class="title">
-                {# TODO: make it with get_absolute_url #}
-                <a href="/news/{{ n.id }}/">
-                    {{ n.title }}
-                </a>
-            </div>
-            <div class="content_html_format">
-                {% autoescape off %}
-                    {{ n.text_block|force_escape|markdown_to_html }}
-                {% endautoescape %}
-            </div>
-            <!-- 
-            <div class="goto_cut">
-                <a href="#">Читать далее</a>
-            </div>-->
-            <ul class="bottom reset">
-                <li>
-                    <ul class="infopanel reset">
-                        <li class="author">
-                            {{ n.author.username }}
-                        </li>
-                        <li class="date">
-                            {{ n.last_change|date:"D, d M Y H:i"  }}
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            {% if n.schoolNews and perms.news.change_schoolnews or n.siteNews and perms.news.change_sitenews or not n.siteNews and not n.schoolNews and perms.news.change_news %}
-                <div class="button">
-                    <a href="/news/{{n.id}}/edit/">
-                        Редактировать
+        {% if not n.hidden or perms.news.view_hidden %}
+            <div class="border">
+                {% if n.hidden %}
+                    <div class="notify">
+                        Внимание! Это скрытая новость.
+                    </div>
+                {% endif %}
+                <div class="title">
+                    {# TODO: make it with get_absolute_url #}
+                    <a href="/news/{{ n.id }}/">
+                        {{ n.title }}
                     </a>
                 </div>
-            {% endif %}
-        </div>
+                <div class="content_html_format">
+                    {% autoescape off %}
+                        {{ n.text_block|force_escape|markdown_to_html }}
+                    {% endautoescape %}
+                </div>
+                <!-- 
+                <div class="goto_cut">
+                    <a href="#">Читать далее</a>
+                </div>-->
+
+                <ul class="bottom reset">
+                    <li>
+                        <ul class="infopanel reset">
+                            <li class="author">
+                                {{ n.author.username }}
+                            </li>
+                            <li class="date">
+                                {{ n.last_change|date:"D, d M Y H:i"  }}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% if n.hidden %}
+                    {% if perms.news.change_hidden or perms.news.change_only_hidden %}
+                        <div class="button">
+                            <a href="/news/{{n.id}}/edit/">
+                                Редактировать
+                            </a>
+                        </div>
+                    {% endif %}
+                {% elif n.schoolNews and perms.news.change_schoolnews or n.siteNews and perms.news.change_sitenews or not n.siteNews and not n.schoolNews and perms.news.change_news and not perms.news.change_only_hidden %}
+                    <div class="button">
+                        <a href="/news/{{n.id}}/edit/">
+                            Редактировать
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

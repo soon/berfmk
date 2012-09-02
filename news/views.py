@@ -35,7 +35,9 @@ def news(request, direction, page):
     if news.count() <= (page - 1) * 10 and news.count():
         raise Http404()
 
-    can_add = request.user.has_perm('news.add_{0}news'.format(direction[:-1]))
+    can_add = request.user.has_perm('news.add_{0}news'.format(direction[:-1])) \
+        or request.user.has_perm('news.add_hidden') \
+        or request.user.has_perm('news.add_only_hidden')
 
     return direct_to_template(
             request,
@@ -53,12 +55,20 @@ def add_news(request, preview = False):
     # сможет добавить новость
     # soon(30.08.12, 11:06)
     # Или не сможет.
+    user = request.user
+
     if not (
-            request.user.has_perm('news.add_news') or \
-            request.user.has_perm('news.add_schoolnews') or \
-            request.user.has_perm('news.add_sitenews')
+        user.has_perm('news.add_news')          or \
+        user.has_perm('news.add_schoolnews')    or \
+        user.has_perm('news.add_sitenews')      or \
+        user.has_perm('news.add_hidden')        or \
+        user.has_perm('news.add_only_hidden')
     ):
+        # soon(02.09.12, 15:32)
+        # FIXME
+        # Сделать нормальную страницу, оповещающую об отсутствии прав
         raise Http404()
+
     # FIXME:
     # Если длинна будет нулевая
     if request.method == 'POST':
@@ -72,33 +82,42 @@ def add_news(request, preview = False):
         if len(text_block) > 1000:
             errors['text_block'] = True
 
-        # news_for = request.POST['checkbox']
-        # if news_for not in ['all', 'site', 'school']:
-        #     print '/news/add/ : news_for not in ["all", "site", "school"]'
-        #     return direct_to_template(
-        #             request,
-        #             'news/add_news.hdt', {
-        #                 'news_title': title,
-        #                 'news_text_block': text_block
-        #             }
-        #         )
-        # schoolNews = news_for == 'school'
-        # siteNews = news_for = 'site'
-
         news = None
 
         if not True in errors.values():
-            # schoolNews, siteNews = False, False
-            # if news_for == 'site':
-            #     siteNews = True
-            # elif news_for == 'school':
-            #     schoolNews = True
+            schoolNews = 'school' in request.POST.keys()
+            if schoolNews and not request.user.has_perm('news.add_schoolnews'):
+                # soon(02.09.12, 14:02)
+                # FIXME
+                # Сделать нормальную страницу, оповещающую об отсутствии прав
+                raise Http404()
+
+            siteNews = 'site' in request.POST.keys()
+            if siteNews and not request.user.has_perm('news.add_sitenews'):
+                # soon(02.09.12, 14:03)
+                # FIXME
+                # Сделать нормальную страницу, оповещающую об отсутствии прав
+                raise Http404()
+
+            hidden = 'hidden' in request.POST.keys() or \
+                    user.has_perm('news.add_only_hidden')
+            if hidden:
+                if not (
+                    user.has_perm('news.add_hidden') or \
+                    user.has_perm('news.add_only_hidden') 
+                ):
+                    # soon(02.09.12, 14:04)
+                    # FIXME
+                    # Сделать нормальную страницу, оповещающую об отсутствии прав
+                    raise Http404()
+
             news = News(
                 title       = title,
                 text_block  = text_block,
-                author      = request.user,
-                schoolNews  = 'school' in request.POST.keys(),
-                siteNews    = 'site' in request.POST.keys()
+                author      = user,
+                schoolNews  = schoolNews,
+                siteNews    = siteNews,
+                hidden      = hidden
             )
             if not preview:
                 news.save()
@@ -110,7 +129,6 @@ def add_news(request, preview = False):
                 'news_text_block'   : text_block,
                 'news'              : news,
                 'errors'            : errors
-
             }
         )
     else:
@@ -118,6 +136,12 @@ def add_news(request, preview = False):
 #-------------------------------------------------------------------------------
 def news_page(request, id):
     news = get_news_or_404(id)
+    if news.hidden and not request.user.has_perm('news.view_hidden'):
+        # soon(02.08.12, 14:17)
+        # FIXME
+        #  Сделать нормальную страницу, оповещающую об отсутствии прав
+        raise Http404()
+
     return direct_to_template(
         request,
         'news/news_page.hdt', {
@@ -131,14 +155,30 @@ def edit_news(request, id, preview = False):
     # сможет добавить новость
     # soon(30.08.12, 11:11)
     # См. выше
+    user = request.user
+
     if not (
-            request.user.has_perm('news.change_news') or \
-            request.user.has_perm('news.change_schoolnews') or \
-            request.user.has_perm('news.change_sitenews')
-        ):
+        user.has_perm('news.add_news')          or \
+        user.has_perm('news.add_schoolnews')    or \
+        user.has_perm('news.add_sitenews')      or \
+        user.has_perm('news.add_hidden')        or \
+        user.has_perm('news.add_only_hidden')
+    ):
+        # soon(02.09.12, 15:32)
+        # FIXME
+        # Сделать нормальную страницу, оповещающую об отсутствии прав
         raise Http404()
 
     news = get_news_or_404(id)
+    if news.hidden:
+        if not (
+            user.has_perm('news.add_hidden') or \
+            user.has_perm('news.add_only_hidden')
+        ):
+        # soon(02.09.12, 14:13)
+        # FIXME
+        # Сделать нормальную страницу, оповещающую об отсутствии прав
+            raise Http404()
     # FIXME:
     # Если длинна будет нулевая
     if request.method == 'POST':
@@ -152,26 +192,36 @@ def edit_news(request, id, preview = False):
         if len(text_block) > 1000:
             errors['text_block'] = True
 
-        # news_for = request.POST['radiobutton']
-        # if news_for not in ['all', 'site', 'school']:
-        #     print '/news/edit/ : news_for not in ["all", "site", "school"]'
-        #     return direct_to_template(
-        #             request,
-        #             'news/edit_news.hdt', {
-        #                 'news': news,
-        #                 'news_title': title,
-        #                 'news_text_block': text_block
-        #             }
-        #         )
-        # schoolNews = news_for == 'school'
-        # siteNews = news_for = 'site'
-
         if not True in errors.values():
             schoolNews = 'school' in request.POST.keys()
+            if schoolNews and not user.has_perm('news.add_schoolnews'):
+                # soon(02.09.12, 14:07)
+                # FIXME
+                # Сделать нормальную страницу, оповещающую об отсутствии прав
+                raise Http404()
+
             siteNews = 'site' in request.POST.keys()
+            if siteNews and not user.has_perm('news.add_sitenews'):
+                # soon(02.09.12, 14:07)
+                # FIXME
+                # Сделать нормальную страницу, оповещающую об отсутствии прав
+                raise Http404()
+
+            hidden = 'hidden' in request.POST.keys() or \
+                    user.has_perm('news.add_only_hidden')
+            if hidden:
+                if not (
+                    user.has_perm('news.add_hidden') or \
+                    user.has_perm('news.add_only_hidden')
+                ):
+                    # soon(02.09.12, 14:08)
+                    # FIXME
+                    # Сделать нормальную страницу, оповещающую об отсутствии прав
+                    raise Http404()
+            news.title, news.text_block, news.schoolNews, news.siteNews = \
+            title,      text_block,         schoolNews,     siteNews
+            news.hidden = hidden
             if not preview:
-                news.title, news.text_block, news.schoolNews, news.siteNews = \
-                title,      text_block,         schoolNews,     siteNews
                 news.save()
                 return redirect('/news/{0}/'.format(id))
         return direct_to_template(

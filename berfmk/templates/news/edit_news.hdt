@@ -7,6 +7,11 @@
 {% block content %}
 <div id="content">
     <div class="border">
+        {% if news.hidden %}
+            <div class="notify">
+                Внимание! Это скрытая новость.
+            </div>
+        {% endif %}
         <div class="title">
             {% filter force_escape %}
                 {% firstof news_title news.title %}
@@ -19,6 +24,11 @@
         </div>
     </div>
     <div class="border">
+        {% if perms.news.add_only_hidden %}
+            <div class="notify">
+                Внимание! Вы можете добавлять только скрытые новости
+            </div>
+        {% endif %}
         <div class="title">
             Редактировать новость
         </div>
@@ -61,41 +71,56 @@
                                 placeholder="Не более 1000 символов">{% firstof news_text_block news.text_block %}</textarea>
                     {% if errors.text_block %}
                         <div class="error_message">
-                            Вам не хватило 1000 символов?
+                            Слишком длинное тело
                         </div>
                     {% endif %}     
                 </li>
             </ul>
             <ul class="reset input_form">
                 {% if perms.news.add_sitenews %}
-                <li class="input_block">
-                    <input  type="checkbox"
-                            id="site"
-                            name="site"
-                            value="site"
-                            tabindex="6"
-                            {% if not news or news.siteNews %}
-                                checked
-                            {% endif %}>
-                    <label for="site" class="input_title">
-                        Новость для сайта
-                    </label>
-                </li>
+                    <li class="input_block">
+                        <input  type="checkbox"
+                                id="site"
+                                name="site"
+                                value="site"
+                                tabindex="6"
+                                {% if not news or news.siteNews %}
+                                    checked
+                                {% endif %}>
+                        <label for="site" class="input_title">
+                            Новость для сайта
+                        </label>
+                    </li>
                 {% endif %}
                 {% if perms.news.add_schoolnews %}
-                <li class="input_block">
-                    <input  type="checkbox"
-                            id="school"
-                            name="school"
-                            value="school"
-                            tabindex="7"
-                            {% if not news or news.schoolNews %}
-                                checked
-                            {% endif %}>
-                    <label for="school" class="input_title">
-                        Новость для школы
-                    </label>
-                </li>
+                    <li class="input_block">
+                        <input  type="checkbox"
+                                id="school"
+                                name="school"
+                                value="school"
+                                tabindex="7"
+                                {% if not news or news.schoolNews %}
+                                    checked
+                                {% endif %}>
+                        <label for="school" class="input_title">
+                            Новость для школы
+                        </label>
+                    </li>
+                {% endif %}
+                {% if perms.news.add_hidden %}
+                    <li class="input_block">
+                        <input  type="checkbox"
+                                id="hidden"
+                                name="hidden"
+                                value="hidden"
+                                tabindex="8"
+                                {% if not news or news.hidden %}
+                                    checked
+                                {% endif %}>
+                        <label for="hidden" class="input_title">
+                            Скрытая новость
+                        </label>
+                    </li>
                 {% endif %}
             </ul>
             <br>

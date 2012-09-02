@@ -10,17 +10,25 @@ class News(models.Model):
     author      = models.ForeignKey(User)
     schoolNews  = models.BooleanField(default = False)
     siteNews    = models.BooleanField(default = False)
+    hidden      = models.BooleanField(default = False)
     #---------------------------------------------------------------------------
     class Meta:
         ordering = ['-last_change']
         #-----------------------------------------------------------------------
         permissions = (
-            (     'add_sitenews',   'Can add sitenews'      ),
-            (   'add_schoolnews',   'Can add schoolnews'    ),
-            (  'change_sitenews',   'Can change sitenews'   ),
-            ('change_schoolnews',   'Can change schoolnews' ),
-            (  'delete_sitenews',   'Can delete sitenews'   ),
-            ('delete_schoolnews',   'Can delete schoolnews' ),
+            (      'add_sitenews',  'Can add sitenews'              ),
+            (    'add_schoolnews',  'Can add schoolnews'            ),
+            (   'change_sitenews',  'Can change sitenews'           ),
+            ( 'change_schoolnews',  'Can change schoolnews'         ),
+            (   'delete_sitenews',  'Can delete sitenews'           ),
+            ( 'delete_schoolnews',  'Can delete schoolnews'         ),
+            (   'add_only_hedden',  'Can add only hidden news'      ),
+            ('change_only_hidden',  'Can change only hidden news'   ),
+            ('delete_only_hidden',  'Can delete only hidden news'   ),
+            (        'add_hidden',  'Can add hidden news'           ),
+            (     'change_hidden',  'Can change hidden news'        ),
+            (     'delete_hidden',  'Can delete hidden news'        ),
+            (       'view_hidden',  'Can view hidden news'          ),
         )
     #---------------------------------------------------------------------------
     def __unicode__(self):
