@@ -22,7 +22,7 @@ class News(models.Model):
             ( 'change_schoolnews',  'Can change schoolnews'         ),
             (   'delete_sitenews',  'Can delete sitenews'           ),
             ( 'delete_schoolnews',  'Can delete schoolnews'         ),
-            (   'add_only_hedden',  'Can add only hidden news'      ),
+            (   'add_only_hidden',  'Can add only hidden news'      ),
             ('change_only_hidden',  'Can change only hidden news'   ),
             ('delete_only_hidden',  'Can delete only hidden news'   ),
             (        'add_hidden',  'Can add hidden news'           ),
