@@ -53,7 +53,7 @@ def register(request):
 
         email = request.POST['input_email']
         if not re.match(
-                r'^[a-z0-9\.\-_]{1,64}@[a-z0-9\.\-_]{1,255}\.[a-z]{2,4}$',
+                r'^[A-Za-z0-9\.\-_]{1,64}@[a-z0-9\.\-_]{1,255}\.[a-z]{2,4}$',
                 email
             ) or len(email) > 75:
             errors['email'] = True
@@ -70,7 +70,7 @@ def register(request):
         if not errors['username']:
             if User.objects.filter(username = username):
                 errors['username_is_already_used'] = True
-            if User.objects.filter(email = email):
+            if User.objects.filter(email = unicode.lower(email)):
                 errors['email_is_already_used'] = True
 
         if not True in errors.values():

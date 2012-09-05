@@ -1,3 +1,5 @@
+{% load get_all_forums %}
+
 <div id="logo"><a href="/"></a></div>
 <div id="userpanel">
     <ul class="reset">
@@ -50,7 +52,24 @@
                 <li><a href="/news/site">Новости сайта</a></li>
             </ul>
         </li>
-        <li><a href="/forum">Форум</a></li>
+        <li>
+            <a href="/forum">Форум</a>
+            {% comment %}
+            {% with forums=get_all_forums %}
+                {% if forums %}
+                    <ul class="reset">
+                    {% for forum in forums %}
+                        <li>
+                            <a href="{{ forum.get_absolute_url }}">
+                                {{ forum.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            {% endcomment %}
+        </li>
         <!--
         <li>
             <a href="#">Разделы</a>

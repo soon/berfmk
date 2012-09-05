@@ -7,12 +7,12 @@
 {% block content %}
 <div id="content">
     {% if news %}
-        {% if news.hidden %}
-            <div class="notify">
-                Внимание! Это скрытая новость.
-            </div>
-        {% endif %}
         <div class="border">
+            {% if news.hidden %}
+                <div class="notify">
+                    Внимание! Это скрытая новость.
+                </div>
+            {% endif %}
             <div class="title">
                 {{ news.title }}
             </div>

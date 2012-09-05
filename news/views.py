@@ -188,7 +188,6 @@ def edit_news(request, id, preview = False):
             errors['title'] = True
 
         text_block = request.POST['input_text_block']
-        print text_block
         if len(text_block) > 1000:
             errors['text_block'] = True
 
