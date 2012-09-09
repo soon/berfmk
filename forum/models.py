@@ -33,12 +33,26 @@ class Section(Base_title_address):
     #---------------------------------------------------------------------------
     def get_absolute_url(self):
         return self.forum.get_absolute_url() + self.address + '/'
+    #---------------------------------------------------------------------------
+    def get_last_post(self):
+        topic = max(
+            self.topic_set.all(),
+            key = lambda t: t.get_last_post().created,
+        )
+        return topic.get_last_post()
 #-------------------------------------------------------------------------------
 class Sub_section(Base_title_address):
     section     = models.ForeignKey(Section)
     #---------------------------------------------------------------------------
     def get_absolute_url(self):
         return self.section.forum.get_absolute_url() + self.address + '/'
+    #---------------------------------------------------------------------------
+    def get_last_post(self):
+        topic = max(
+            self.topic_set.all(),
+            key = lambda t: t.get_last_post().created,
+        )
+        return topic.get_last_post()
 #-------------------------------------------------------------------------------
 class Topic(models.Model):
     title       = models.CharField(max_length = 64)
@@ -51,8 +65,8 @@ class Topic(models.Model):
     visible     = models.BooleanField(default = True)
     locked      = models.BooleanField(default = False)
     #---------------------------------------------------------------------------
-    class Meta:
-        ordering = ['-created']
+    # class Meta:
+        # ordering = ['-created']
     #---------------------------------------------------------------------------
     def __unicode__(self):
         return u'%s - %s at %s(%s)' % \
@@ -83,7 +97,7 @@ class Post(models.Model):
         return u'%s - %s...(%s)' % (self.creator, self.body[:10], self.topic)
     #---------------------------------------------------------------------------
     def get_absolute_url(self):
-        p = 1 if self.number == 0 else (self.number - 1) / 10 + 1
+        p = 1 if self.number == 0 else (self.number) / 10 + 1
         return self.topic.get_absolute_url() + 'page/' + str(p) + '/#post' + \
             str(self.id)
 #-------------------------------------------------------------------------------

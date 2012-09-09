@@ -2,6 +2,8 @@
 
 {% block title %}Форум: раздел "{{ section.title }}"{% endblock %}
 
+{% load humanize %}
+
 {% block content %}
 <div id="content">
     {% if sub_sections %}
@@ -14,6 +16,15 @@
                     <a href="{{ sub_section.get_absolute_url }}">
                         {{ sub_section.title }}
                     </a>
+                    {% with sub_section.get_last_post as post %}
+                        <span class="info">
+                            <span class="date">
+                                {{ post.created|naturaltime }}
+                            </span> от <span class="username">
+                                {{ post.creator }}
+                            </span>
+                        </span>
+                    {% endwith %}
                 </div>
             {% endfor %}
         </div>
@@ -36,6 +47,15 @@
                     <a href="{{ topic.get_absolute_url }}">
                         {{ topic.title }}
                     </a>
+                    {% with topic.get_last_post as post %}
+                        <span class="info">
+                            <span class="date">
+                                {{ post.created|naturaltime }}
+                            </span> от <span class="username">
+                                {{ post.creator }}
+                            </span>
+                        </span>
+                    {% endwith %}
                 </div>
             {% endfor %}
         </div>

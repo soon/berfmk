@@ -25,7 +25,7 @@ TIME_ZONE = 'Asia/Yekaterinburg'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en_en'
+LANGUAGE_CODE = 'ru-RU'
 
 SITE_ID = 1
 
@@ -128,7 +128,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.comments',
-    'django.contrib.markup',
+    # 'django.contrib.markup',
+    'django.contrib.humanize',
     'berfmk',
     'south',
     'accounts',

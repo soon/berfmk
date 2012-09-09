@@ -2,6 +2,8 @@
 
 {% block title %}Форум "{{ forum.title }}"{% endblock %}
 
+{% load humanize %}
+
 {% block content %}
 <div id="content">
     {% for section in sections %}
@@ -16,6 +18,15 @@
                     <a href="{{ sub_section.get_absolute_url }}">
                         {{ sub_section.title }}
                     </a>
+                    {% with sub_section.get_last_post as post %}
+                        <span class="info">
+                            <span class="date">
+                                {{ post.created|naturaltime }}
+                            </span> от <span class="username">
+                                {{ post.creator }}
+                            </span>
+                        </span>
+                    {% endwith %}
                 </div>
             {% endfor %}
         </div>

@@ -22,7 +22,7 @@
         <div class="title">
             Новое сообщение
         </div>
-        <form action="/forum/{{ forum.address }}/{{ section.address }}/{{ topic.address }}/add-post/" method="post">
+        <form action="{{ topic.get_absolute_url }}add-post/" method="post">
             {% csrf_token %}
             <ul class="reset input_form">
                 <li class="input_block">
@@ -52,7 +52,7 @@
                 <input  type="submit" 
                         value="Предпросмотр" 
                         tabindex="11"
-                        formaction="/forum/{{ forum.address }}/{{ section.address }}/{{ topic.address }}/add-post/preview/">
+                        formaction="{{ topic.get_absolute_url }}add-post/preview/">
             </fieldset>
         </form>
     </div>

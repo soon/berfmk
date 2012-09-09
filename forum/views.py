@@ -50,10 +50,15 @@ def topics(request, forum, section):
     f = get_object_or_404(Forum, address = forum)
     try:
         s = f.section_set.get(address = section)
+        topics = sorted(
+            s.topic_set.filter(sub_section = None),
+            key = lambda t: t.get_last_post().created,
+            reverse = True
+        )
         return direct_to_template(
             request,
             'forum/section.hdt', {
-                'topics'        : s.topic_set.filter(sub_section = None),
+                'topics'        : topics,
                 'sub_sections'  : s.sub_section_set.all(),
                 'section'       : s,
                 'forum'         : f
@@ -61,10 +66,15 @@ def topics(request, forum, section):
         )
     except ObjectDoesNotExist:
         ss = get_object_or_404(Sub_section, address = section)
+        topics = sorted(
+            ss.topic_set.exclude(sub_section = None),
+            key = lambda t: t.get_last_post().created,
+            reverse = True
+        )
         return direct_to_template(
             request,
             'forum/sub_section.hdt', {
-                'topics'        : ss.topic_set.exclude(sub_section = None),
+                'topics'        : topics,
                 'sub_section'   : ss,
                 'forum'         : f
             }
@@ -89,9 +99,9 @@ def posts(request, forum, section, topic, page):
         return direct_to_template(
             request,
             'forum/topic.hdt', {
-                'posts'         : p[:11] if page == 1 else \
+                'posts'         : p[:10] if page == 1 else \
                                     list(p[:1]) + \
-                                    list(p[(page - 1) * 10:page * 10 + 1]),
+                                    list(p[(page - 1) * 10:page * 10]),
                 'topic'         : t,
                 'section'       : s,
                 'forum'         : f,
@@ -109,7 +119,7 @@ def posts(request, forum, section, topic, page):
         return direct_to_template(
             request,
             'forum/topic.hdt', {
-                'posts'         : p[:11] if page == 1 else \
+                'posts'         : p[:10] if page == 1 else \
                                     list(p[:1]) + \
                                     list(p[(page - 1) * 10:page * 10]),
                 'topic'         : t,

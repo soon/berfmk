@@ -2,6 +2,8 @@
 
 {% block title %}Форум: подраздел "{{ sub_section.title }}"{% endblock %}
 
+{% load humanize %}
+
 {% block content %}
 <div id="content">
     {% if perms.forum.add_topic and perms.forum.add_post %}
@@ -19,6 +21,15 @@
                     <a href="{{ topic.get_absolute_url }}">
                         {{ topic.title }}
                     </a>
+                    {% with topic.get_last_post as post %}
+                        <span class="info">
+                            <span class="date">
+                                {{ post.created|naturaltime }}
+                            </span> от <span class="username">
+                                {{ post.creator }}
+                            </span>
+                        </span>
+                    {% endwith %}
                 </div>
             {% endfor %}
         </div>
