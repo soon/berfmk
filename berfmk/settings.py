@@ -1,27 +1,18 @@
 # Django settings for berfmk project.
 import os.path
+from django_settings import settings
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
+DEBUG = settings.DEBUG
+
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
+ADMINS = settings.ADMINS
 
-MANAGERS = ADMINS
+MANAGERS = settings.MANAGERS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'berfmk',
-        'USER': 'postgres',
-        'PASSWORD': 'DC37R8f750brYZMy',
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+DATABASES = settings.DATABASES
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
