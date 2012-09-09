@@ -35,11 +35,15 @@ class Section(Base_title_address):
         return self.forum.get_absolute_url() + self.address + '/'
     #---------------------------------------------------------------------------
     def get_last_post(self):
-        topic = max(
-            self.topic_set.all(),
-            key = lambda t: t.get_last_post().created,
-        )
-        return topic.get_last_post()
+        topics = self.topic_set.all()
+        if not topics:
+            return None
+        else:
+            topic = max(
+                topics,
+                key = lambda t: t.get_last_post().created,
+            )
+            return topic.get_last_post()
 #-------------------------------------------------------------------------------
 class Sub_section(Base_title_address):
     section     = models.ForeignKey(Section)
@@ -48,11 +52,15 @@ class Sub_section(Base_title_address):
         return self.section.forum.get_absolute_url() + self.address + '/'
     #---------------------------------------------------------------------------
     def get_last_post(self):
-        topic = max(
-            self.topic_set.all(),
-            key = lambda t: t.get_last_post().created,
-        )
-        return topic.get_last_post()
+        topics = self.topic_set.all()
+        if not topics:
+            return None
+        else:
+            topic = max(
+                topics,
+                key = lambda t: t.get_last_post().created,
+            )
+            return topic.get_last_post()
 #-------------------------------------------------------------------------------
 class Topic(models.Model):
     title       = models.CharField(max_length = 64)

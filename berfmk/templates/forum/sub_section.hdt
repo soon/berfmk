@@ -23,11 +23,15 @@
                     </a>
                     {% with topic.get_last_post as post %}
                         <span class="info">
-                            <span class="date">
-                                {{ post.created|naturaltime }}
-                            </span> от <span class="username">
-                                {{ post.creator }}
-                            </span>
+                            {% if post %}
+                                <span class="date">
+                                    {{ post.created|naturaltime }}
+                                </span> от <span class="username">
+                                    {{ post.creator }}
+                                </span>
+                            {% else %}
+                                Нет сообщений
+                            {% endif %}
                         </span>
                     {% endwith %}
                 </div>
