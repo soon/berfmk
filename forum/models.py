@@ -13,13 +13,15 @@ from django.contrib.auth.models import User
 #                                     |
 #                                   post
 #-------------------------------------------------------------------------------
-# Add fields title and address and simple __unicode__
+# Add fields title, address and order and simple __unicode__
 class Base_title_address(models.Model):
     title       = models.CharField(max_length = 64)
     address     = models.CharField(max_length = 32)
+    order       = models.PositiveIntegerField(default = 0)
     #---------------------------------------------------------------------------
     class Meta:
         abstract = True
+        ordering = ['-order']
     #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.title

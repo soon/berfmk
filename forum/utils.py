@@ -2,10 +2,11 @@
 #-------------------------------------------------------------------------------
 from forum.models   import Forum, Section, Sub_section, Topic, Post
 #-------------------------------------------------------------------------------
-def create_and_get_forum(title, address):
+def create_and_get_forum(title, address, order = 0):
     f, created = Forum.objects.get_or_create(title = title, address = address)
     if(not created):
         raise ValueError('Forum with that address and title already exists')
+    f.update(order = order)
     return f
 #-------------------------------------------------------------------------------
 def create_and_get_section(title, address, forum):
@@ -18,6 +19,7 @@ def create_and_get_section(title, address, forum):
                     )
     if(not created):
         raise ValueError('Section with that address and title already exists')
+    s.update(order = order)
     return s
 #-------------------------------------------------------------------------------
 def create_and_get_sub_section(title, address, section):
@@ -32,6 +34,7 @@ def create_and_get_sub_section(title, address, section):
         raise   ValueError(
                     'Sub_section with that address and title already exists'
                 )
+    ss.update(order = order)
     return ss
 #-------------------------------------------------------------------------------
 def create_and_get_topic(title, creator, section, body):
@@ -68,10 +71,11 @@ def create_and_get_post(topic, creator, body):
                         topic = topic,
                         creator = creator,
                         body = body,
-                        number = topic.get_last_post().number + 1
+                        # number = topic.get_last_post().number + 1
                     )
     if(not created):
         raise ValueError('This post already exists')
 
+    p.update(number = topic.get_last_post().number + 1);
     return p
 #-------------------------------------------------------------------------------

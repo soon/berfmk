@@ -26,7 +26,7 @@
                                 </span> от <span class="username">
                                     {{ post.creator }}
                                 </span>
-                            {% elif %}
+                            {% else %}
                                 Нет сообщений
                             {% endif %}
                         </span>

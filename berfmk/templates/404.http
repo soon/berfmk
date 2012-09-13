@@ -1,0 +1,14 @@
+{% extends "main.hdt" %}
+
+{% block title %}Страница не найдена{% endblock %}
+
+{% block content %}
+<div id="content">
+    <div class="border">
+        <div class="title">Страница не найдена</div>
+        <div class="content_html_format">
+            К сожалению, запрашиваемая Вами страница не найдена. Возможно, ее просто не существует. Если вы уверены в обратном, то сообщите, пожалуйста, о данной проблеме администрации сайта.
+        </div>
+    </div>
+</div>
+{% endblock %}

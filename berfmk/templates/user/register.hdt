@@ -67,7 +67,8 @@
                     {% endif %}
                     <br>
                     <span class="comment">
-                        На указанный e-mail будет отправлено письмо с подтверждением.
+                        <del>На указанный e-mail будет отправлено письмо с подтверждением.</del><br>
+                        Враки. Отправим чуть позже.
                     </span>
                 <li class="input_block">
                     <label for="input_password" class="input_title">
