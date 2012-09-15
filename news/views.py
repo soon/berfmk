@@ -4,6 +4,8 @@ from django.shortcuts               import redirect
 from django.views.generic.simple    import direct_to_template
 from django.conf                    import settings
 from django.http                    import Http404
+from django.core.paginator          import Paginator, EmptyPage
+from django.core.paginator          import PageNotAnInteger
 #-------------------------------------------------------------------------------
 from news.models                    import News
 from news.utils                     import get_news_or_404
@@ -32,8 +34,14 @@ def news(request, direction, page):
     elif(siteNews):
         news = news.filter(siteNews = siteNews)
 
-    if news.count() <= (page - 1) * 10 and news.count():
-        raise Http404()
+    paginator = Paginator(news, 5)
+    try:
+        news = paginator.page(page)
+    except EmptyPage:
+        news = paginator.page(paginator.num_pages)
+
+    # if news.count() <= (page - 1) * 10 and news.count():
+        # raise Http404()
 
     can_add = request.user.has_perm('news.add_{0}news'.format(direction[:-1])) \
         or request.user.has_perm('news.add_hidden') \
@@ -43,8 +51,8 @@ def news(request, direction, page):
             request,
             'news/news.hdt', {
                 'direction': part_of_title,
-                'page': page,
-                'news': news[(page - 1) * 10:page * 10],
+                # 'page': page,
+                'news': news,
                 'can_add': can_add
             }
         )

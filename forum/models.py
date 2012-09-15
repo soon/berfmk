@@ -21,7 +21,7 @@ class Base_title_address(models.Model):
     #---------------------------------------------------------------------------
     class Meta:
         abstract = True
-        ordering = ['-order']
+        ordering = ['order']
     #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.title

@@ -1,6 +1,6 @@
 {% extends "main.hdt" %}
 
-{% block title %}Новости{{ direction }}: Страница {{ page }}{% endblock %}
+{% block title %}Новости{{ direction }}: Страница {{ news.number }}{% endblock %}
 
 {% load markdown_to_html %}
 
@@ -67,5 +67,17 @@
             </div>
         {% endif %}
     {% endfor %}
+    <div id="page-nav">
+        <div id="next-prev">
+            {% with n as news.__getitem__.0 %}
+                {% if news.has_previous %}
+                    <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.previous_page_number }}">←</a>
+                {% endif %}
+                {% if news.has_next %}
+                    <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.next_page_number }}">→</a>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
 </div>
 {% endblock %}
