@@ -945,6 +945,7 @@ header
     padding                 : 20px 40px 25px 25px;
     margin-top              : 20px;
     font-size               : 20px;
+    overflow                : hidden;
 
     -webkit-border-radius   : 5px;
     -moz-border-radius      : 5px;
@@ -1008,6 +1009,34 @@ header
 {
     font-size               : 18px;
     text-align              : justify;
+}
+/* 
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .content_html_format > p,
+#content > .border > .content_html_format > h1,
+#content > .border > .content_html_format > h2,
+#content > .border > .content_html_format > h3,
+#content > .border > .content_html_format > h4,
+#content > .border > .content_html_format > h5,
+#content > .border > .content_html_format > h6
+{
+    padding-top             : 5px;
+    padding-bottom          : 5px;
+}
+/* 
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .content_html_format > p
+{
+    text-indent             : 20px;
+}
+/* 
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .content_html_format > ul
+{
+    margin-left             : 20px;
 }
 /*
  * --------------------------------------------------------------------------- *
@@ -1327,7 +1356,7 @@ header
 {
     position                : absolute;
     margin-top              : 5px;
-    right                   : 17%;
+    right                   : 15%;
     font-size               : 15px;
 }
 /* 
@@ -1347,6 +1376,10 @@ header
 /* 
  * --------------------------------------------------------------------------- *
  */
+#content > .border > .line .info > .goto
+{
+    text-decoration         : none;
+}
 /*
  * --------------------------------------------------------------------------- *
  *                              FORUM END

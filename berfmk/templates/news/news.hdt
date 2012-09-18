@@ -67,17 +67,19 @@
             </div>
         {% endif %}
     {% endfor %}
-    <div id="page-nav">
-        <div id="next-prev">
-            {% with n as news.__getitem__.0 %}
-                {% if news.has_previous %}
-                    <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.previous_page_number }}">←</a>
-                {% endif %}
-                {% if news.has_next %}
-                    <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.next_page_number }}">→</a>
-                {% endif %}
-            {% endwith %}
+    {% if news.paginator.num_pages > 1 %}
+        <div id="page-nav">
+            <div id="next-prev">
+                {% with n as news.__getitem__.0 %}
+                    {% if news.has_previous %}
+                        <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.previous_page_number }}">←</a>
+                    {% endif %}
+                    {% if news.has_next %}
+                        <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.next_page_number }}">→</a>
+                    {% endif %}
+                {% endwith %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}

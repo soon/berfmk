@@ -69,17 +69,15 @@ def create_and_get_topic(title, creator, section, body):
 def create_and_get_post(topic, creator, body):
     if(not Topic.objects.get(id = topic.id) == topic):
         raise ValueError('Invalid topic')
-    
+
     p, created =    Post.objects.get_or_create(
                         topic = topic,
                         creator = creator,
-                        body = body,
-                        # number = topic.get_last_post().number + 1
+                        body = body
                     )
     if(not created):
         raise ValueError('This post already exists')
 
-    p.number = topic.get_last_post().number + 1
     p.save()
     return p
 #-------------------------------------------------------------------------------

@@ -10,6 +10,5 @@ register = template.Library()
 @register.filter(needs_autoescape = False)
 @stringfilter
 def markdown_to_html(text):
-    text = text.replace('\r', '<br>')
     return markdown(text)
 #-------------------------------------------------------------------------------

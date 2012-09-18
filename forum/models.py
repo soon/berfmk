@@ -96,7 +96,8 @@ class Post(models.Model):
     creator     = models.ForeignKey(User)
     topic       = models.ForeignKey(Topic)
     body        = models.TextField(max_length = 1000)
-    number      = models.PositiveIntegerField(default = 0)
+    # viewers     = models.ManyToManyField(User)
+    # number      = models.PositiveIntegerField(default = 0)
     #---------------------------------------------------------------------------
     visible     = models.BooleanField(default = True)
     #---------------------------------------------------------------------------
@@ -107,7 +108,15 @@ class Post(models.Model):
         return u'%s - %s...(%s)' % (self.creator, self.body[:10], self.topic)
     #---------------------------------------------------------------------------
     def get_absolute_url(self):
-        p = 1 if self.number == 0 else (self.number) / 10 + 1
-        return self.topic.get_absolute_url() + 'page/' + str(p) + '/#post' + \
-            str(self.id)
+        # p = 1 if self.number == 0 else (self.number) / 10 + 1
+        # return self.topic.get_absolute_url() + 'page/' + str(p) + '/#post' + \
+            # str(self.id)
+        # p = 1 if self.is_first_post() \
+            # else self.topic.post_set.objects.count()
+        # TODO
+        # soon(19.09.12)
+        return self.topic.get_absolute_url()
+    #---------------------------------------------------------------------------
+    def is_first_post(self):
+        return self.topic.post_set.objects.all()[0] is self
 #-------------------------------------------------------------------------------

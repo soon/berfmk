@@ -7,16 +7,42 @@
 
 {% block content %}
 <div id="content">
+    <div class="border" id="post{{ first_post.id }}">
+        <div class="title">
+            {# TODO #}
+            {# <a href="{{ first_post.get_absolute_url }}"> #}
+                {{ topic.title }}
+            {# </a> #}
+        </div>
+        <div class="content_html_format">
+            {% autoescape off %}
+                {{ first_post.body|force_escape|markdown_to_html }}
+            {% endautoescape %}
+        </div>
+        <ul class="bottom reset">
+            <li>
+                <ul class="infopanel reset">
+                    <li class="author">
+                        {{ forst_post.creator }}
+                    </li>
+                    <li class="date">
+                        {{ first_post.created|date:"D, d M Y H:i"  }}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
     {% for post in posts %}
         <div class="border" id="post{{ post.id }}">
                 <div class="title">
-                    <a href="{{ post.get_absolute_url }}">
+                    {# TODO #}
+                    {# <a href="{{ post.get_absolute_url }}"> #}
 
-                        {% if not forloop.first %}
-                            #{{ post.number }} Re: 
-                        {% endif %}
+                        {# {% if not forloop.first %} #}
+                            #{{ posts.number|add:"-1"|product:"10"|add:forloop.counter }} Re: 
+                        {# {% endif %} #}
                         {{ topic.title }}
-                    </a>
+                    {# </a> #}
                 </div>
                 <div class="content_html_format">
                     {% autoescape off %}
@@ -37,6 +63,18 @@
             </ul>
         </div>
     {% endfor %}
+    {% if posts.paginator.num_pages > 1 %}
+        <div id="page-nav">
+            <div id="next-prev">
+                    {% if posts.has_previous %}
+                        <a href="{{ topic.get_absolute_url }}page/{{ posts.previous_page_number }}">←</a>
+                    {% endif %}
+                    {% if posts.has_next %}
+                        <a href="{{ topic.get_absolute_url }}page/{{ posts.next_page_number }}">→</a>
+                    {% endif %}
+            </div>
+        </div>
+    {% endif %}
     {% if perms.forum.add_post %}
         <div class="border">
             <div class="title">

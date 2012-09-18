@@ -25,12 +25,16 @@
                                     {{ post.created|naturaltime }}
                                 </span> от <span class="username">
                                     {{ post.creator }}
-                                </span>
+                                </span> <a class="goto" href="{{ post.get_absolute_url }}">→</a>
                             {% else %}
                                 Нет сообщений
                             {% endif %}
                         </span>
                     {% endwith %}
+                </div>
+            {% empty %}
+                <div class="line">
+                    Нет подразделов
                 </div>
             {% endfor %}
         </div>

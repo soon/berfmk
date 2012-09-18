@@ -6,6 +6,7 @@ from django.conf                    import settings
 from django.http                    import Http404
 from django.db.models               import Q
 from django.core.exceptions         import ObjectDoesNotExist
+from django.core.paginator          import Paginator, EmptyPage
 #-------------------------------------------------------------------------------
 from forum.models                   import Forum, Section, Sub_section, Topic
 from forum.models                   import Post
@@ -92,41 +93,59 @@ def posts(request, forum, section, topic, page):
             id = topic
         )
         p = t.post_set.all()
+        first_post = p[0];
 
-        if p.count() <= (page - 1) * 10 and p.count():
-            raise Http404()
+        paginator = Paginator(p[1:], 10)
+        try:
+            p = paginator.page(page)
+        except EmptyPage:
+            p = paginator.page(paginator.num_pages)
+
+        # if p.count() <= (page - 1) * 10 and p.count():
+            # raise Http404()
 
         return direct_to_template(
             request,
             'forum/topic.hdt', {
-                'posts'         : p[:10] if page == 1 else \
-                                    list(p[:1]) + \
-                                    list(p[(page - 1) * 10:page * 10]),
+                # 'posts'         : p[:10] if page == 1 else \
+                                    # list(p[:1]) + \
+                                    # list(p[(page - 1) * 10:page * 10]),
+                'first_post'    : first_post,
+                'posts'         : p,
                 'topic'         : t,
                 'section'       : s,
-                'forum'         : f,
-                'page'          : page
+                'forum'         : f
+                # 'page'          : page
             }
         )
     except ObjectDoesNotExist:
         ss = get_object_or_404(Sub_section, address = section)
         t = get_object_or_404(ss.topic_set.all(), id = topic)
         p = t.post_set.all()
+        first_post = p[0];
 
-        if p.count() <= (page - 1) * 10 and p.count():
-            raise Http404()
+        paginator = Paginator(p[1:], 10)
+        try:
+            p = paginator.page(page)
+        except EmptyPage:
+            p = paginator.page(paginator.num_pages)
+
+        # if p.count() <= (page - 1) * 10 and p.count():
+            # raise Http404()
 
         return direct_to_template(
             request,
             'forum/topic.hdt', {
-                'posts'         : p[:10] if page == 1 else \
-                                    list(p[:1]) + \
-                                    list(p[(page - 1) * 10:page * 10]),
+                # 'posts'         : p[:10] if page == 1 else \
+                                    # list(p[:1]) + \
+                                    # list(p[(page - 1) * 10:page * 10]),
+                'first_post'    : first_post,
+                'posts'         : p,
                 'topic'         : t,
                 'sub_section'   : ss,
                 'section'       : ss.section,
-                'forum'         : f,
-                'page'          : page
+                'forum'         : f
+                # 'page'          : page
             }
         )
 #-------------------------------------------------------------------------------
