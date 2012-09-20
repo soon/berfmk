@@ -18,14 +18,14 @@ a
 {
     color                   : #333;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 a:hover
 {
     color                   : #F15A23;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 .reset
@@ -118,7 +118,7 @@ header
 #userpanel > ul > li.button:hover
 {
     background              : #F15A23;
-    
+
     -webkit-border-radius   : 4px;
     -moz-border-radius      : 4px;
     -o-border-radius        : 4px;
@@ -136,7 +136,7 @@ header
 #userpanel > ul > li.button:hover > a
 {
     color                   : #000;
-    
+
     -webkit-transition      : all 100ms linear;
     -moz-transition         : all 100ms linear;
     -o-transition           : all 100ms linear;
@@ -238,7 +238,7 @@ header
     -ms-transform           : rotate(45deg);
     -o-transform            : rotate(45deg);
     transform               : rotate(45deg);
-    
+
 }
 /*
  * --------------------------------------------------------------------------- *
@@ -470,7 +470,7 @@ header
  */
 #userpanel > ul > li#userprofile > #card > #avatar > a > img
 {
-    position                : absolute;   
+    position                : absolute;
     width                   : 80px;
     height                  : 80px
 
@@ -978,7 +978,7 @@ header
     -ms-box-shadow          : 0px 1px 40px rgba(0, 0, 0, 0.5);
     box-shadow              : 0px 1px 40px rgba(0, 0, 0, 0.5);
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border img
@@ -1010,7 +1010,7 @@ header
     font-size               : 18px;
     text-align              : justify;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .content_html_format > p,
@@ -1024,14 +1024,14 @@ header
     padding-top             : 5px;
     padding-bottom          : 5px;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .content_html_format > p
 {
     text-indent             : 20px;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .content_html_format > ul
@@ -1066,7 +1066,7 @@ header
     font-size               : 16px;
     color                   : #F15A23;
     margin-bottom           : -20px;
-    padding-left            : 25px; 
+    padding-left            : 25px;
 }
 /*
  * --------------------------------------------------------------------------- *
@@ -1128,6 +1128,39 @@ header
 /*
  * --------------------------------------------------------------------------- *
  *                              INFOPANEL END
+ * --------------------------------------------------------------------------- *
+ */
+/* --------------------------------------------------------------------------- *
+ *                              LAST EDITED
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .bottom > li > .last_edited
+{
+    position                : relative;
+    float                   : left;
+    padding-top             : 12px;
+    padding-left            : 15px;
+    font-size               : 16px;
+}
+/*
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .bottom > li > .last_edited > .time
+{
+    margin-left             : 4px;
+    display                 : inline-block;
+    font-style              : italic;
+}
+/*
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .bottom > li > .infopanel > .user
+{
+
+}
+/*
+ * --------------------------------------------------------------------------- *
+ *                              LAST EDITED END
  * --------------------------------------------------------------------------- *
  */
 /*
@@ -1296,7 +1329,7 @@ header
     -ms-transition          : all 200ms linear;
     transition              : all 200ms linear;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line:hover
@@ -1309,7 +1342,7 @@ header
     -ms-transition          : all 200ms linear;
     transition              : all 200ms linear;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line > .line
@@ -1329,16 +1362,16 @@ header
     -ms-transition          : all 200ms linear;
     transition              : all 200ms linear;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line > .line:last-child
 {
     margin-bottom           : 0px;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
- */   
+ */
 #content > .border > .line > .line:hover
 {
     background              : #CCC;
@@ -1349,7 +1382,7 @@ header
     -ms-transition          : all 200ms linear;
     transition              : all 200ms linear;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line .info
@@ -1359,21 +1392,21 @@ header
     right                   : 15%;
     font-size               : 15px;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line .info > .date
 {
     font-style              : italic;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line .info > .username
 {
-    font-weight             : bold; 
+    font-weight             : bold;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content > .border > .line .info > .goto
@@ -1395,14 +1428,14 @@ header
     padding                 : 10px;
     margin-top              : 10px;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content #page-nav > #next-prev
 {
     font-size               : 2em;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content #page-nav > #next-prev > a
@@ -1416,13 +1449,13 @@ header
     -o-border-radius        : 4px;
     -ms-border-radius       : 4px;
     border-radius           : 4px;
-    
+
     -webkit-transition      : all 100ms linear;
     -moz-transition         : all 100ms linear;
     -o-transition           : all 100ms linear;
     transition              : all 100ms linear;
 }
-/* 
+/*
  * --------------------------------------------------------------------------- *
  */
 #content #page-nav > #next-prev > a:hover
@@ -1430,7 +1463,7 @@ header
     color                   : #FFF;
     background              : #F15A23;
     font-style              : none;
-    
+
 
     -webkit-border-radius   : 4px;
     -moz-border-radius      : 4px;

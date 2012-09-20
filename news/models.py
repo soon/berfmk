@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 class News(models.Model):
     title       = models.CharField(max_length = 100)
     text_block  = models.TextField()
-    last_change = models.DateTimeField(auto_now = True)
+    created     = models.DateTimeField(auto_now_add = True)
+    last_change = models.DateTimeField(auto_now = True, null = True)
     author      = models.ForeignKey(User)
     schoolNews  = models.BooleanField(default = False)
     siteNews    = models.BooleanField(default = False)
@@ -33,4 +34,7 @@ class News(models.Model):
     #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.title
+    #---------------------------------------------------------------------------
+    def get_absolute_url(self):
+        return u'news/' + unicode(id) + u'/'
 #-------------------------------------------------------------------------------

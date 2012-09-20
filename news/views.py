@@ -5,7 +5,6 @@ from django.views.generic.simple    import direct_to_template
 from django.conf                    import settings
 from django.http                    import Http404
 from django.core.paginator          import Paginator, EmptyPage
-# from django.core.paginator          import PageNotAnInteger
 #-------------------------------------------------------------------------------
 from news.models                    import News
 from news.utils                     import get_news_or_404
@@ -28,20 +27,25 @@ def news(request, direction, page):
     # Может быть сделать отдельную страницу для пустых страниц
     # soon(30.08.12, 11:04)
     # Что я хотел себе этим сказать - непонятно
-    news = News.objects.all()
+    news = News.objects.filter(hidden = False)
+    hidden_news = News.objects.filter(hidden = True) \
+        if request.user.has_perm('news.view_hidden') \
+        else []
+
     if(schoolNews):
-        news = news.filter(schoolNews = schoolNews)
+        news = news.filter(schoolNews = True)
+        if(hidden_news):
+            hidden_news = hidden_news.filter(schoolNews = True)
     elif(siteNews):
-        news = news.filter(siteNews = siteNews)
+        news = news.filter(siteNews = True)
+        if(hidden_news):
+            hidden_news = hidden_news.filter(siteNews = True)
 
     paginator = Paginator(news, 10)
     try:
         news = paginator.page(page)
     except EmptyPage:
         news = paginator.page(paginator.num_pages)
-
-    # if news.count() <= (page - 1) * 10 and news.count():
-        # raise Http404()
 
     can_add = request.user.has_perm('news.add_{0}news'.format(direction[:-1])) \
         or request.user.has_perm('news.add_hidden') \
@@ -50,10 +54,10 @@ def news(request, direction, page):
     return direct_to_template(
             request,
             'news/news.hdt', {
-                'direction': part_of_title,
-                # 'page': page,
-                'news': news,
-                'can_add': can_add
+                'direction'     : part_of_title,
+                'news'          : news,
+                'hidden_news'   : hidden_news,
+                'can_add'       : can_add
             }
         )
 #-------------------------------------------------------------------------------
@@ -247,4 +251,4 @@ def edit_news(request, id, preview = False):
                 'news': news
             }
         )
-        
+#-------------------------------------------------------------------------------
