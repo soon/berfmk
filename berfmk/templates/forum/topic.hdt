@@ -39,7 +39,7 @@
                     {# <a href="{{ post.get_absolute_url }}"> #}
 
                         {# {% if not forloop.first %} #}
-                            #{{ posts.number|add:"-1"|product:"10"|add:forloop.counter }} Re: 
+                            #{{ posts.number|add:"-1"|product:"10"|add:forloop.counter }} Re:
                         {# {% endif %} #}
                         {{ topic.title }}
                     {# </a> #}
@@ -101,14 +101,14 @@
                             <div class="error_message">
                                 Слишком длинное сообщение
                             </div>
-                        {% endif %}     
+                        {% endif %}
                     </li>
                 </ul>
                 <br>
                 <fieldset class="submit">
                     <input type="submit" value="Добавить" tabindex="10">
-                    <input  type="submit" 
-                            value="Предпросмотр" 
+                    <input  type="submit"
+                            value="Предпросмотр"
                             tabindex="11"
                             formaction="{{ topic.get_absolute_url }}add-post/preview/">
                 </fieldset>

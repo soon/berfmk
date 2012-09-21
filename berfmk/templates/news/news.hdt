@@ -42,19 +42,19 @@
                             </li>
                         </ul>
                     </li>
-                    {% comment %}
-                    <li>
-                        <ul class="last_edited reset">
-                            обновлено<li class="time">
-                                 {{ n.last_change|naturaltime }}
-                            </li>
-                        </ul>
-                    </li>
-                    {% endcomment %}
+                    {% if n.last_editor %}
+                        <li>
+                            <ul class="last_edited reset">
+                                <li class="user">{{ n.last_editor }}</li>: обновлено <li class="time">
+                                     {{ n.last_change|naturaltime }}
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
                 </ul>
                 {% if perms.news.change_hidden or perms.news.change_only_hidden %}
                     <div class="button">
-                        <a href="{{ n.get_absilute_url }}edit/">
+                        <a href="{{ n.get_absolute_url }}edit/">
                             Редактировать
                         </a>
                     </div>
@@ -86,10 +86,19 @@
                             {{ n.author.username }}
                         </li>
                         <li class="date">
-                            {{ n.last_change|date:"D, d M Y H:i"  }}
+                            {{ n.created|date:"D, d M Y H:i" }}
                         </li>
                     </ul>
                 </li>
+                {% if n.last_editor %}
+                    <li>
+                        <ul class="last_edited reset">
+                            <li class="user">{{ n.last_editor }}</li>: обновлено <li class="time">
+                                 {{ n.last_change|naturaltime }}
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
             </ul>
             {% if n.schoolNews and perms.news.change_schoolnews or n.siteNews and perms.news.change_sitenews or not n.siteNews and not n.schoolNews and perms.news.change_news and not perms.news.change_only_hidden %}
                 <div class="button">

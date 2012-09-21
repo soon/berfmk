@@ -3,7 +3,7 @@
 {% block title %}{{ news.title }}{% endblock %}
 
 {% load markdown_to_html %}
-{% load i18n %}
+{% load humanize %}
 {% load comments %}
 
 {% block content %}
@@ -29,12 +29,19 @@
                         {{ news.author.username }}
                     </li>
                     <li class="date">
-                        {% with news.last_change|date:"D, d M Y H:i" as d %}
-                        {% trans d %}
-                        {% endwith %}
+                        {{ news.created|date:"D, d M Y H:i" }}
                     </li>
                 </ul>
             </li>
+            {% if news.last_editor %}
+                <li>
+                    <ul class="last_edited reset">
+                        <li class="user">{{ news.last_editor }}</li>: обновлено <li class="time">
+                             {{ news.last_change|naturaltime }}
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
         </ul>
         {% if news.schoolNews and perms.news.change_schoolnews or news.siteNews and perms.news.change_sitenews or not news.siteNews and not news.schoolNews and perms.news.change_news %}
             <div class="button">

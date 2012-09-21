@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
 from django.db                  import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 #-------------------------------------------------------------------------------
 class News(models.Model):
     title       = models.CharField(max_length = 100)
     text_block  = models.TextField()
     created     = models.DateTimeField(auto_now_add = True)
     last_change = models.DateTimeField(auto_now = True, null = True)
-    author      = models.ForeignKey(User)
+    author      = models.ForeignKey(User, related_name = 'author')
+    last_editor = models.ForeignKey(
+        User,
+        related_name = 'last_editor',
+        null = True
+    )
     schoolNews  = models.BooleanField(default = False)
     siteNews    = models.BooleanField(default = False)
     hidden      = models.BooleanField(default = False)
@@ -36,5 +41,5 @@ class News(models.Model):
         return self.title
     #---------------------------------------------------------------------------
     def get_absolute_url(self):
-        return u'news/' + unicode(id) + u'/'
+        return u'news/' + unicode(self.id) + u'/'
 #-------------------------------------------------------------------------------

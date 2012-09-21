@@ -1147,16 +1147,16 @@ header
  */
 #content > .border > .bottom > li > .last_edited > .time
 {
-    margin-left             : 4px;
     display                 : inline-block;
     font-style              : italic;
 }
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > .bottom > li > .infopanel > .user
+#content > .border > .bottom > li > .last_edited > .user
 {
-
+    display                 : inline-block;
+    font-weight             : bold;
 }
 /*
  * --------------------------------------------------------------------------- *

@@ -12,7 +12,7 @@ from news.utils                     import get_number_from_param_or_404
 #-------------------------------------------------------------------------------
 def news(request, direction, page):
     page = get_number_from_param_or_404(page)
-    
+
     schoolNews, siteNews = False, False
     part_of_title = ''
     if direction == 'site/':
@@ -63,7 +63,7 @@ def news(request, direction, page):
 #-------------------------------------------------------------------------------
 def add_news(request, preview = False):
     # FIXME
-    # Если послать поддельный POST, то юзер без прав(на определенный раздел) 
+    # Если послать поддельный POST, то юзер без прав(на определенный раздел)
     # сможет добавить новость
     # soon(30.08.12, 11:06)
     # Или не сможет.
@@ -116,7 +116,7 @@ def add_news(request, preview = False):
             if hidden:
                 if not (
                     user.has_perm('news.add_hidden') or \
-                    user.has_perm('news.add_only_hidden') 
+                    user.has_perm('news.add_only_hidden')
                 ):
                     # soon(02.09.12, 14:04)
                     # FIXME
@@ -136,7 +136,7 @@ def add_news(request, preview = False):
                 return redirect('/news/{0}'.format(news.id))
         return direct_to_template(
             request,
-            'news/add_news.hdt', { 
+            'news/add_news.hdt', {
                 'news_title'        : title,
                 'news_text_block'   : text_block,
                 'news'              : news,
@@ -163,7 +163,7 @@ def news_page(request, id):
 #-------------------------------------------------------------------------------
 def edit_news(request, id, preview = False):
     # FIXME
-    # Если послать поддельный POST, то юзер без прав(на определенный раздел) 
+    # Если послать поддельный POST, то юзер без прав(на определенный раздел)
     # сможет добавить новость
     # soon(30.08.12, 11:11)
     # См. выше
@@ -233,6 +233,7 @@ def edit_news(request, id, preview = False):
             title,      text_block,         schoolNews,     siteNews
             news.hidden = hidden
             if not preview:
+                news.last_editor = user
                 news.save()
                 return redirect('/news/{0}/'.format(id))
         return direct_to_template(
