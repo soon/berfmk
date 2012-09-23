@@ -2,6 +2,7 @@
 #-------------------------------------------------------------------------------
 from django.shortcuts               import redirect
 from django.views.generic.simple    import direct_to_template
+from django.views.generic           import ListView
 from django.conf                    import settings
 from django.http                    import Http404
 from django.core.paginator          import Paginator, EmptyPage
@@ -10,56 +11,46 @@ from news.models                    import News
 from news.utils                     import get_news_or_404
 from news.utils                     import get_number_from_param_or_404
 #-------------------------------------------------------------------------------
-def news(request, direction, page):
-    page = get_number_from_param_or_404(page)
+class NewsList(ListView):
+    model               = News
+    context_object_name = 'news'
+    paginate_by         = 10
+    template_name       = 'news/news.hdt'
+    #---------------------------------------------------------------------------
+    def get_queryset(self):
+        direction = self.kwargs['direction']
+        news = News.objects.filter(hidden = False)
+        if direction == 'site/':
+            news = news.filter(siteNews = True)
+        elif direction == 'school/':
+            news = news.filter(schoolNews = True)
+        elif direction != '':
+            raise Http404()
+        return news
+    #---------------------------------------------------------------------------
+    def get_context_data(self, **kwargs):
+        context = super(NewsList, self).get_context_data(**kwargs)
+        user = self.request.user
 
-    schoolNews, siteNews = False, False
-    part_of_title = ''
-    if direction == 'site/':
-        siteNews = True
-        part_of_title = ' сайта'
-    elif direction == 'school/':
-        schoolNews = True
-        part_of_title = ' школы'
-    elif direction != '':
-        raise Http404()
-    # NOTE
-    # Может быть сделать отдельную страницу для пустых страниц
-    # soon(30.08.12, 11:04)
-    # Что я хотел себе этим сказать - непонятно
-    news = News.objects.filter(hidden = False)
-    hidden_news = News.objects.filter(hidden = True) \
-        if request.user.has_perm('news.view_hidden') \
-        else []
+        direction = self.kwargs['direction']
+        context['can_add'] = user.has_perm('news.add_%snews' % direction[:-1]) \
+            or user.has_perm('news.add_hidden') \
+            or user.has_perm('news.add_only_hidden')
 
-    if(schoolNews):
-        news = news.filter(schoolNews = True)
-        if(hidden_news):
-            hidden_news = hidden_news.filter(schoolNews = True)
-    elif(siteNews):
-        news = news.filter(siteNews = True)
-        if(hidden_news):
-            hidden_news = hidden_news.filter(siteNews = True)
+        can_view_hidden = user.has_perm('news.view_hidden')
+        hidden_news = News.objects.filter(hidden = True) if can_view_hidden \
+            else []
+        if direction == 'site/':
+            context['direction'] = ' сайта'
+            if hidden_news:
+                hidden_news = hidden_news.filter(siteNews = True)
+        elif direction == 'school/':
+            context['direction'] = ' школы'
+            if hidden_news:
+                hidden_news = hidden_news.filter(schoolNews = True)
+        context['hidden_news'] = hidden_news
 
-    paginator = Paginator(news, 10)
-    try:
-        news = paginator.page(page)
-    except EmptyPage:
-        news = paginator.page(paginator.num_pages)
-
-    can_add = request.user.has_perm('news.add_{0}news'.format(direction[:-1])) \
-        or request.user.has_perm('news.add_hidden') \
-        or request.user.has_perm('news.add_only_hidden')
-
-    return direct_to_template(
-            request,
-            'news/news.hdt', {
-                'direction'     : part_of_title,
-                'news'          : news,
-                'hidden_news'   : hidden_news,
-                'can_add'       : can_add
-            }
-        )
+        return context
 #-------------------------------------------------------------------------------
 def add_news(request, preview = False):
     # FIXME

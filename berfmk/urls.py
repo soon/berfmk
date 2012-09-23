@@ -1,16 +1,18 @@
-from django.conf.urls import patterns, include, url
-
+# -*- coding: utf-8 -*-
+#-------------------------------------------------------------------------------
+from django.conf.urls   import patterns, include, url
+#-------------------------------------------------------------------------------
+from news.views         import NewsList
+#-------------------------------------------------------------------------------
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
-
 urlpatterns = patterns(
     '',
     url(r'^comments/', include('django.contrib.comments.urls')),
-    url(r'^$', 'news.views.news', {'direction': '', 'page': '1'}),
+    url(r'^$', NewsList.as_view(), {'direction': '', 'page': '1'}),
     url(r'^news/', include('news.urls')),
     url(r'^forum/', include('forum.urls')),
-    # url(r'^forum/$', 'forum.views.forum_main'),
     url(r'^art/(?P<name>.+)/$', 'art.views.art_page'),
     url(r'^login/$', 'accounts.views.login'),
     url(r'^logout/$', 'accounts.views.logout'),
@@ -25,3 +27,4 @@ urlpatterns = patterns(
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
+#-------------------------------------------------------------------------------

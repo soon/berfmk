@@ -22,7 +22,7 @@
                     Внимание! Это скрытая новость.
                 </div>
                 <div class="title">
-                    <a href="{{ n.get_absolute_url }}">
+                    <a href="/{{ n.get_absolute_url }}">
                         {{ n.title }}
                     </a>
                 </div>
@@ -54,7 +54,7 @@
                 </ul>
                 {% if perms.news.change_hidden or perms.news.change_only_hidden %}
                     <div class="button">
-                        <a href="{{ n.get_absolute_url }}edit/">
+                        <a href="/{{ n.get_absolute_url }}edit/">
                             Редактировать
                         </a>
                     </div>
@@ -109,15 +109,15 @@
             {% endif %}
         </div>
     {% endfor %}
-    {% if news.paginator.num_pages > 1 %}
+    {% if page_obj.paginator.num_pages > 1 %}
         <div id="page-nav">
             <div id="next-prev">
                 {% with n as news.__getitem__.0 %}
-                    {% if news.has_previous %}
-                        <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.previous_page_number }}">←</a>
+                    {% if page_obj.has_previous %}
+                        <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ page_obj.previous_page_number }}">←</a>
                     {% endif %}
-                    {% if news.has_next %}
-                        <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ news.next_page_number }}">→</a>
+                    {% if page_obj.has_next %}
+                        <a href="/news/{% if n.siteNews %}site/{% elif n.schoolNews %}school/{% endif %}page/{{ page_obj.next_page_number }}">→</a>
                     {% endif %}
                 {% endwith %}
             </div>
