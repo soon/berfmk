@@ -3,6 +3,7 @@
 from django.shortcuts               import redirect
 from django.views.generic.simple    import direct_to_template
 from django.views.generic           import ListView, CreateView
+from django.views.generic.detail    import DetailView
 from django.conf                    import settings
 from django.http                    import Http404
 from django.core.paginator          import Paginator, EmptyPage
@@ -53,20 +54,18 @@ class NewsList(ListView):
 
         return context
 #-------------------------------------------------------------------------------
-def news_page(request, id):
-    news = get_news_or_404(id)
-    if news.hidden and not request.user.has_perm('news.view_hidden'):
-        # soon(02.08.12, 14:17)
-        # FIXME
-        #  Сделать нормальную страницу, оповещающую об отсутствии прав
-        raise Http404()
-
-    return direct_to_template(
-        request,
-        'news/news_page.hdt', {
-            'news': news
-        }
-    )
+class NewsView(DetailView):
+    model               = News
+    context_object_name = 'news'
+    template_name       = 'news/news_view.hdt'
+    #---------------------------------------------------------------------------
+    def get_object(self):
+        object = super(NewsView, self).get_object()
+        if object.hidden and not self.request.user.has_perm('news.view_hidden'):
+            # TODO soon
+            # Сделать нормальную страницу, оповещающую об отсутствии прав
+            raise Http404
+        return object
 #-------------------------------------------------------------------------------
 def edit_news(request, id, preview = False):
     # FIXME
