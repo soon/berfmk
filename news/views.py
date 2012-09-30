@@ -2,12 +2,13 @@
 #-------------------------------------------------------------------------------
 from django.shortcuts               import redirect
 from django.views.generic.simple    import direct_to_template
-from django.views.generic           import ListView
+from django.views.generic           import ListView, CreateView
 from django.conf                    import settings
 from django.http                    import Http404
 from django.core.paginator          import Paginator, EmptyPage
 #-------------------------------------------------------------------------------
 from news.models                    import News
+from news.forms                     import NewsForm
 from news.utils                     import get_news_or_404
 from news.utils                     import get_number_from_param_or_404
 #-------------------------------------------------------------------------------
@@ -51,91 +52,6 @@ class NewsList(ListView):
         context['hidden_news'] = hidden_news
 
         return context
-#-------------------------------------------------------------------------------
-def add_news(request, preview = False):
-    # FIXME
-    # Если послать поддельный POST, то юзер без прав(на определенный раздел)
-    # сможет добавить новость
-    # soon(30.08.12, 11:06)
-    # Или не сможет.
-    user = request.user
-
-    if not (
-        user.has_perm('news.add_news')          or \
-        user.has_perm('news.add_schoolnews')    or \
-        user.has_perm('news.add_sitenews')      or \
-        user.has_perm('news.add_hidden')        or \
-        user.has_perm('news.add_only_hidden')
-    ):
-        # soon(02.09.12, 15:32)
-        # FIXME
-        # Сделать нормальную страницу, оповещающую об отсутствии прав
-        raise Http404()
-
-    # FIXME:
-    # Если длинна будет нулевая
-    if request.method == 'POST':
-        errors = {'title': False, 'text_block': False}
-
-        title = request.POST['input_title']
-        if len(title) > 100:
-            errors['title'] = True
-
-        text_block = request.POST['input_text_block']
-        if len(text_block) > 1000:
-            errors['text_block'] = True
-
-        news = None
-
-        if not True in errors.values():
-            schoolNews = 'school' in request.POST.keys()
-            if schoolNews and not request.user.has_perm('news.add_schoolnews'):
-                # soon(02.09.12, 14:02)
-                # FIXME
-                # Сделать нормальную страницу, оповещающую об отсутствии прав
-                raise Http404()
-
-            siteNews = 'site' in request.POST.keys()
-            if siteNews and not request.user.has_perm('news.add_sitenews'):
-                # soon(02.09.12, 14:03)
-                # FIXME
-                # Сделать нормальную страницу, оповещающую об отсутствии прав
-                raise Http404()
-
-            hidden = 'hidden' in request.POST.keys() or \
-                    user.has_perm('news.add_only_hidden')
-            if hidden:
-                if not (
-                    user.has_perm('news.add_hidden') or \
-                    user.has_perm('news.add_only_hidden')
-                ):
-                    # soon(02.09.12, 14:04)
-                    # FIXME
-                    # Сделать нормальную страницу, оповещающую об отсутствии прав
-                    raise Http404()
-
-            news = News(
-                title       = title,
-                text_block  = text_block,
-                author      = user,
-                schoolNews  = schoolNews,
-                siteNews    = siteNews,
-                hidden      = hidden
-            )
-            if not preview:
-                news.save()
-                return redirect('/news/{0}'.format(news.id))
-        return direct_to_template(
-            request,
-            'news/add_news.hdt', {
-                'news_title'        : title,
-                'news_text_block'   : text_block,
-                'news'              : news,
-                'errors'            : errors
-            }
-        )
-    else:
-        return direct_to_template(request, 'news/add_news.hdt')
 #-------------------------------------------------------------------------------
 def news_page(request, id):
     news = get_news_or_404(id)

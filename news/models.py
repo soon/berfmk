@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 #-------------------------------------------------------------------------------
 class News(models.Model):
     title       = models.CharField(max_length = 100)
-    text_block  = models.TextField()
+    text_block  = models.TextField(max_length = 1000)
     created     = models.DateTimeField(auto_now_add = True)
     last_change = models.DateTimeField(auto_now = True, null = True)
     author      = models.ForeignKey(User, related_name = 'author')

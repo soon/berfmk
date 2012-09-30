@@ -9,7 +9,7 @@ from news.views         import NewsList
 # admin.autodiscover()
 urlpatterns = patterns(
     '',
-    url(r'^comments/', include('django.contrib.comments.urls')),
+    # url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^$', NewsList.as_view(), {'direction': '', 'page': '1'}),
     url(r'^news/', include('news.urls')),
     url(r'^forum/', include('forum.urls')),

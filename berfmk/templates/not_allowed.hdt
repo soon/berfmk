@@ -1,0 +1,16 @@
+{% extends "main.hdt" %}
+
+{% block title %}Недостаточно прав{% endblock %}
+
+{% block content %}
+<div id="content">
+    <div class="border">
+        <div class="title">Недостаточно прав</div>
+        <div class="content_html_format">
+            Сожалеем, но у Вас нет прав для просмотра данной страницы.<br>
+            Если вы уверены, что это ошибка, позвоните по телефону 555-1300<br>
+            Взываем к Вашему благоразумию.<br>
+        </div>
+    </div>
+</div>
+{% endblock %}

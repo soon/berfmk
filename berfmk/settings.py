@@ -14,6 +14,12 @@ MANAGERS = settings.MANAGERS
 
 DATABASES = settings.DATABASES
 
+SECRET_KEY = settings.SECRET_KEY
+
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -75,9 +81,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'nhq2&amp;^j0x+z6q41=*jj(ee2)6e9s&amp;v=_y+me)9k^=png0p60!^'
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -113,7 +116,7 @@ ROOT_URLCONF = 'berfmk.urls'
 WSGI_APPLICATION = 'berfmk.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # '/home/soon/Src/Django/berfmk/art/templates', 
+    # '/home/soon/Src/Django/berfmk/art/templates',
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -130,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     # 'django.contrib.markup',
     'django.contrib.humanize',
+    'django.contrib.formtools',
     'berfmk',
     'south',
     'accounts',

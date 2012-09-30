@@ -1189,7 +1189,7 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > label.input_title
+#content > .border > form > ul.input_form > li.input_block > label
 {
     font-size               : 16px;
     font-weight             : bold;
@@ -1254,7 +1254,8 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > .submit > input
+#content > .border > form > .submit > input,
+#content > .border > form > .submit > button
 {
     font-size               : 20px;
     padding                 : 4px;
@@ -1277,7 +1278,8 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > .submit > input:hover
+#content > .border > form > .submit > input:hover,
+#content > .border > form > .submit > button:hover
 {
     background              : #F15A23;
     color                   : #FFF;
