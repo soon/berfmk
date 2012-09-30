@@ -1,6 +1,6 @@
 {% extends "main.hdt" %}
 
-{% block title %}Предпросмотр{% endblock %}
+{% block title %}Редактирование новости{% endblock %}
 
 {% load markdown_to_html %}
 
@@ -25,9 +25,9 @@
         </div>
     </div>
     <div class="border">
-        {% if perms.news.add_only_hidden %}
+        {% if perms.news.change_only_hidden %}
             <div class="notify">
-                Внимание! Вы можете добавлять только скрытые новости
+                Внимание! Вы можете редактировать только скрытые новости
             </div>
         {% endif %}
         <div class="title">
@@ -48,9 +48,8 @@
             </ul>
             <br>
             <fieldset class="submit">
-                <input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}">
-                <button type="submit" name="{{ stage_field }}" value="2" tabindex="10">Опубликовать</button>
-                <button type="submit" name="{{ stage_field }}" value="1" tabindex="11">Предпросмотр</button>
+                <button type="submit" name="submit" value="1" tabindex="10">Сохранить</button>
+                <button type="submit" name="preview" value="1" tabindex="11">Предпросмотр</button>
             </fieldset>
         </form>
     </div>

@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
-from django.shortcuts               import redirect
-from django.views.generic.simple    import direct_to_template
+from django.shortcuts               import render_to_response
 from django.views.generic           import ListView, CreateView
 from django.views.generic.detail    import DetailView
-from django.conf                    import settings
+from django.views.generic.edit      import UpdateView
 from django.http                    import Http404
-from django.core.paginator          import Paginator, EmptyPage
 #-------------------------------------------------------------------------------
 from news.models                    import News
 from news.forms                     import NewsForm
-from news.utils                     import get_news_or_404
-from news.utils                     import get_number_from_param_or_404
 #-------------------------------------------------------------------------------
 class NewsList(ListView):
     model               = News
@@ -67,95 +63,49 @@ class NewsView(DetailView):
             raise Http404
         return object
 #-------------------------------------------------------------------------------
-def edit_news(request, id, preview = False):
-    # FIXME
-    # Если послать поддельный POST, то юзер без прав(на определенный раздел)
-    # сможет добавить новость
-    # soon(30.08.12, 11:11)
-    # См. выше
-    user = request.user
-
-    if not (
-        user.has_perm('news.add_news')          or \
-        user.has_perm('news.add_schoolnews')    or \
-        user.has_perm('news.add_sitenews')      or \
-        user.has_perm('news.add_hidden')        or \
-        user.has_perm('news.add_only_hidden')
-    ):
-        # soon(02.09.12, 15:32)
+class NewsUpdate(UpdateView):
+    form_class      = NewsForm
+    model           = News
+    template_name   = 'news/news_update.hdt'
+    #---------------------------------------------------------------------------
+    def dispatch(self, request, *args, **kwargs):
+        # soon
         # FIXME
         # Сделать нормальную страницу, оповещающую об отсутствии прав
-        raise Http404()
-
-    news = get_news_or_404(id)
-    if news.hidden:
-        if not (
-            user.has_perm('news.add_hidden') or \
-            user.has_perm('news.add_only_hidden')
-        ):
-        # soon(02.09.12, 14:13)
-        # FIXME
-        # Сделать нормальную страницу, оповещающую об отсутствии прав
+        response = super(NewsUpdate, self).dispatch(request, *args, **kwargs)
+        news = self.object
+        has_perm = request.user.has_perm
+        if news.hidden:
+            if not (
+                has_perm('news.change_hidden') or \
+                has_perm('news.change_only_hidden')
+            ):
+                raise Http404()
+        elif has_perm('news.change_only_hidden'):
             raise Http404()
-    # FIXME:
-    # Если длинна будет нулевая
-    if request.method == 'POST':
-        errors = {'title': False, 'text_block': False}
-        title = request.POST['input_title']
-        if len(title) > 100:
-            errors['title'] = True
-
-        text_block = request.POST['input_text_block']
-        if len(text_block) > 1000:
-            errors['text_block'] = True
-
-        if not True in errors.values():
-            schoolNews = 'school' in request.POST.keys()
-            if schoolNews and not user.has_perm('news.add_schoolnews'):
-                # soon(02.09.12, 14:07)
-                # FIXME
-                # Сделать нормальную страницу, оповещающую об отсутствии прав
-                raise Http404()
-
-            siteNews = 'site' in request.POST.keys()
-            if siteNews and not user.has_perm('news.add_sitenews'):
-                # soon(02.09.12, 14:07)
-                # FIXME
-                # Сделать нормальную страницу, оповещающую об отсутствии прав
-                raise Http404()
-
-            hidden = 'hidden' in request.POST.keys() or \
-                    user.has_perm('news.add_only_hidden')
-            if hidden:
-                if not (
-                    user.has_perm('news.add_hidden') or \
-                    user.has_perm('news.add_only_hidden')
-                ):
-                    # soon(02.09.12, 14:08)
-                    # FIXME
-                    # Сделать нормальную страницу, оповещающую об отсутствии прав
-                    raise Http404()
-            news.title, news.text_block, news.schoolNews, news.siteNews = \
-            title,      text_block,         schoolNews,     siteNews
-            news.hidden = hidden
-            if not preview:
-                news.last_editor = user
-                news.save()
-                return redirect('/news/{0}/'.format(id))
-        return direct_to_template(
-            request,
-            'news/edit_news.hdt', {
-                'news'              : news,
-                'news_title'        : title,
-                'news_text_block'   : text_block,
-                'errors'            : errors
-            }
-        )
-    else:
-        return direct_to_template(
-            request,
-            'news/edit_news.hdt', {
-                'news': news
-            }
-        )
+        if news.siteNews and not has_perm('news.change_sitenews'):
+            raise Http404()
+        if news.schoolNews and not has_perm('news.change_schoolnews'):
+            raise Http404()
+        return response
+    #---------------------------------------------------------------------------
+    def form_valid(self, form):
+        if 'preview' in self.request.POST:
+            return self.render_to_response(self.get_context_data(form = form))
+        return super(NewsUpdate, self).form_valid(form)
+    #---------------------------------------------------------------------------
+    def get_context_data(self, **kwargs):
+        context = super(NewsUpdate, self).get_context_data(**kwargs)
+        fields_to_exclude = []
+        request = self.request
+        if not request.user.has_perm('news.change_sitenews'):
+            fields_to_exclude.append('siteNews')
+        if not request.user.has_perm('news.change_schoolnews'):
+            fields_to_exclude.append('schoolNews')
+        if not request.user.has_perm('news.change_hidden'):
+            fields_to_exclude.append('hidden')
+        if request.user.has_perm('news.change_only_hidden'):
+            fields_to_exclude.extend(['schoolNews', 'siteNews', 'hidden'])
+        context['form'].exclude_fields(fields_to_exclude)
+        return context
 #-------------------------------------------------------------------------------

@@ -54,7 +54,7 @@
                 </ul>
                 {% if perms.news.change_hidden or perms.news.change_only_hidden %}
                     <div class="button">
-                        <a href="/{{ n.get_absolute_url }}edit/">
+                        <a href="{{ n.get_absolute_url }}edit/">
                             Редактировать
                         </a>
                     </div>

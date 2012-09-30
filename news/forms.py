@@ -26,7 +26,7 @@ class NewsForm(MyModelForm):
             self.fields[field].widget.attrs['tabindex'] = tabindex
             tabindex = tabindex + 1
     #---------------------------------------------------------------------------
-    class Meta:
+    class Meta(object):
         model = News
         fields = ('title', 'text_block', 'schoolNews', 'siteNews', 'hidden')
 #-------------------------------------------------------------------------------

@@ -27,8 +27,8 @@ class NewsFormPreview(MyFormPreview):
             fields_to_exclude.append('schoolNews')
         if not request.user.has_perm('news.add_hidden'):
             fields_to_exclude.append('hidden')
-        if request.user.has_perm('news.add_only_hidden'):
-            fields_to_exclude.append('schoolNews', 'siteNews', 'hidden')
+        if request.user.has_perm('news.change_only_hidden'):
+            fields_to_exclude.extend(['schoolNews', 'siteNews', 'hidden'])
         context['form'].exclude_fields(fields_to_exclude)
         return context
 #-------------------------------------------------------------------------------

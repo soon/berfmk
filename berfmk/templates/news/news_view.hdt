@@ -1,5 +1,7 @@
 {% extends "main.hdt" %}
 
+{% block title %}Новость: {{ news.title }}{% endblock %}
+
 {% block title %}{{ news.title }}{% endblock %}
 
 {% load markdown_to_html %}
@@ -45,7 +47,7 @@
         </ul>
         {% if news.schoolNews and perms.news.change_schoolnews or news.siteNews and perms.news.change_sitenews or not news.siteNews and not news.schoolNews and perms.news.change_news %}
             <div class="button">
-                <a href="/news/{{ news.id }}/edit/">
+                <a href="{{ news.get_absolute_url }}edit/">
                     Редактировать
                 </a>
             </div>

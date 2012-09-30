@@ -1,5 +1,7 @@
 {% extends "main.hdt" %}
 
+{% block title %}Добавить новость{% endblock %}
+
 {% load is_checkbox %}
 
 {% block content %}
