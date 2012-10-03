@@ -2,8 +2,6 @@
 
 {% block title %}Новость: {{ news.title }}{% endblock %}
 
-{% block title %}{{ news.title }}{% endblock %}
-
 {% load markdown_to_html %}
 {% load humanize %}
 {% load comments %}

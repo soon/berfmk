@@ -4,7 +4,7 @@ from django.shortcuts               import render_to_response
 from django.views.generic           import ListView, CreateView
 from django.views.generic.detail    import DetailView
 from django.views.generic.edit      import UpdateView
-from django.http                    import Http404
+from django.http                    import Http404, HttpResponseRedirect
 #-------------------------------------------------------------------------------
 from news.models                    import News
 from news.forms                     import NewsForm
@@ -92,7 +92,11 @@ class NewsUpdate(UpdateView):
     def form_valid(self, form):
         if 'preview' in self.request.POST:
             return self.render_to_response(self.get_context_data(form = form))
-        return super(NewsUpdate, self).form_valid(form)
+        else:
+            self.object = form.save()
+            self.object.last_editor = self.request.user
+            self.object.save()
+            return HttpResponseRedirect(self.get_success_url())
     #---------------------------------------------------------------------------
     def get_context_data(self, **kwargs):
         context = super(NewsUpdate, self).get_context_data(**kwargs)
