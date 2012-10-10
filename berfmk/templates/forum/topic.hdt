@@ -23,10 +23,13 @@
             <li>
                 <ul class="infopanel reset">
                     <li class="author">
-                        {{ forst_post.creator }}
+                        {{ first_post.creator }}
                     </li>
                     <li class="date">
-                        {{ first_post.created|date:"D, d M Y H:i"  }}
+                        {{ first_post.created|date:"l, d E Y"  }}
+                    </li>
+                    <li class="time">
+                        {{ first_post.created|date:"H:i" }}
                     </li>
                 </ul>
             </li>
@@ -56,7 +59,10 @@
                             {{ post.creator }}
                         </li>
                         <li class="date">
-                            {{ post.created|date:"D, d M Y H:i"  }}
+                            {{ post.created|date:"l, d E Y" }}
+                        </li>
+                        <li class="time">
+                            {{ post.created|date:"H:i" }}
                         </li>
                     </ul>
                 </li>

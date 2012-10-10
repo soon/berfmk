@@ -29,7 +29,10 @@
                         {{ news.author.username }}
                     </li>
                     <li class="date">
-                        {{ news.created|date:"D, d M Y H:i" }}
+                        {{ news.created|date:"l, d E Y" }}
+                    </li>
+                    <li class="time">
+                        {{ news.created|date:"H:i" }}
                     </li>
                 </ul>
             </li>

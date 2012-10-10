@@ -1124,7 +1124,25 @@ header
 {
     margin-right            : 7px;
 }
-
+/*
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .bottom > li > .infopanel > li.time,
+#content > .border > .bottom > li > .infopanel > li.author
+{
+    font-weight             : bold;
+}
+/*
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .bottom > li > .infopanel > li.time,
+#content > .border > .bottom > li > .infopanel > li.date
+{
+    font-style              : italic;
+}
+/*
+ * --------------------------------------------------------------------------- *
+ */
 /*
  * --------------------------------------------------------------------------- *
  *                              INFOPANEL END

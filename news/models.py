@@ -41,5 +41,5 @@ class News(models.Model):
         return self.title
     #---------------------------------------------------------------------------
     def get_absolute_url(self):
-        return u'/news/' + unicode(self.id) + u'/'
+        return u'/news/%i/' % self.id
 #-------------------------------------------------------------------------------

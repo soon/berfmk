@@ -22,7 +22,7 @@
                     Внимание! Это скрытая новость.
                 </div>
                 <div class="title">
-                    <a href="/{{ n.get_absolute_url }}">
+                    <a href="{{ n.get_absolute_url }}">
                         {{ n.title }}
                     </a>
                 </div>
@@ -38,7 +38,10 @@
                                 {{ n.author.username }}
                             </li>
                             <li class="date">
-                                {{ n.created|date:"D, d M Y H:i" }}
+                                {{ n.created|date:"l, d E Y" }}
+                            </li>
+                            <li class="time">
+                                {{ n.created|date:"H:i" }}
                             </li>
                         </ul>
                     </li>
@@ -86,7 +89,10 @@
                             {{ n.author.username }}
                         </li>
                         <li class="date">
-                            {{ n.created|date:"D, d M Y H:i" }}
+                            {{ n.created|date:"l, d E Y" }}
+                        </li>
+                        <li class="time">
+                            {{ n.created|date:"H:i" }}
                         </li>
                     </ul>
                 </li>
