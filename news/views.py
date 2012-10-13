@@ -48,6 +48,7 @@ class NewsList(ListView):
                 hidden_news = hidden_news.filter(schoolNews = True)
         context['hidden_news'] = hidden_news
 
+
         return context
 #-------------------------------------------------------------------------------
 class NewsView(DetailView):

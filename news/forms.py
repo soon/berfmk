@@ -1,25 +1,14 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
-from berfmk.forms   import MyModelForm
-from news.models    import News
+from django.forms           import TextInput, Textarea
+from django.forms.models    import fields_for_model
+#-------------------------------------------------------------------------------
+from berfmk.forms           import MyModelForm
+from news.models            import News
 #-------------------------------------------------------------------------------
 class NewsForm(MyModelForm):
     def __init__(self, *args, **kwargs):
         super(NewsForm, self).__init__(*args, **kwargs)
-
-        self.fields['title'].label = 'Заголовок'
-        self.fields['title'].widget.attrs['required'] = ''
-        self.fields['title'].widget.attrs['class'] = "full_width"
-        self.fields['title'].widget.attrs['class'] = "full_width"
-
-        self.fields['text_block'].label = 'Текст новости'
-        self.fields['text_block'].widget.attrs['required'] = ''
-        self.fields['text_block'].widget.attrs['rows'] = 20
-        self.fields['text_block'].widget.attrs['class'] = "full_width"
-
-        self.fields['schoolNews'].label = 'Новость для школы'
-        self.fields['siteNews'].label = 'Новость для сайта'
-        self.fields['hidden'].label = 'Скрытая новость'
 
         tabindex = 1
         for field in self.fields:
@@ -27,6 +16,22 @@ class NewsForm(MyModelForm):
             tabindex = tabindex + 1
     #---------------------------------------------------------------------------
     class Meta(object):
-        model = News
-        fields = ('title', 'text_block', 'schoolNews', 'siteNews', 'hidden')
+        model   = News
+        fields  = ('title', 'text_block', 'schoolNews', 'siteNews', 'hidden')
+        widgets = {
+            'title'     : TextInput(
+                attrs = {'required': '', 'class': 'full_width'}
+            ),
+            'text_block': Textarea(
+                attrs = {
+                    'required'  : '',
+                    'rows'      : 20,
+                    'class'     : 'full_width',
+                    'maxlength' : fields_for_model(
+                        News, fields = ('text_block', )
+                    )['text_block'].max_length
+                    # I have no idea why it not set automatically
+                }
+            )
+        }
 #-------------------------------------------------------------------------------

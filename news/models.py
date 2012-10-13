@@ -4,19 +4,29 @@ from django.db                  import models
 from django.contrib.auth.models import User
 #-------------------------------------------------------------------------------
 class News(models.Model):
-    title       = models.CharField(max_length = 100)
-    text_block  = models.TextField(max_length = 1000)
+    title       = models.CharField(
+        max_length = 100,   verbose_name = u'Заголовок'
+    )
+    text_block  = models.CharField(
+        max_length = 2000,  verbose_name = u'Текст новости'
+    )
     created     = models.DateTimeField(auto_now_add = True)
     last_change = models.DateTimeField(auto_now = True, null = True)
-    author      = models.ForeignKey(User, related_name = 'author')
-    last_editor = models.ForeignKey(
-        User,
-        related_name = 'last_editor',
-        null = True
+    author      = models.ForeignKey(
+        User, related_name = 'author'
     )
-    schoolNews  = models.BooleanField(default = False)
-    siteNews    = models.BooleanField(default = False)
-    hidden      = models.BooleanField(default = False)
+    last_editor = models.ForeignKey(
+        User, related_name = 'last_editor', null = True
+    )
+    schoolNews  = models.BooleanField(
+        default = False, verbose_name = u'Новость для школы'
+    )
+    siteNews    = models.BooleanField(
+        default = False, verbose_name = u'Новость для сайта'
+    )
+    hidden      = models.BooleanField(
+        default = False, verbose_name = u'Скрытая новость'
+    )
     #---------------------------------------------------------------------------
     class Meta:
         ordering = ['-last_change']
