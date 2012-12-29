@@ -16,7 +16,7 @@ class NewsFormPreview(MyFormPreview):
         n.author = request.user
         n.save()
         f.save_m2m()
-        return HttpResponseRedirect('/' + n.get_absolute_url())
+        return HttpResponseRedirect(n.get_absolute_url())
     #---------------------------------------------------------------------------
     def get_context(self, request, form):
         context = super(NewsFormPreview, self).get_context(request, form)

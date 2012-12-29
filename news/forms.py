@@ -5,22 +5,19 @@ from django.forms.models    import fields_for_model
 #-------------------------------------------------------------------------------
 from berfmk.forms           import MyModelForm
 from news.models            import News
+from captcha.forms          import ReCaptchaField
 #-------------------------------------------------------------------------------
 class NewsForm(MyModelForm):
-    def __init__(self, *args, **kwargs):
-        super(NewsForm, self).__init__(*args, **kwargs)
-
-        tabindex = 1
-        for field in self.fields:
-            self.fields[field].widget.attrs['tabindex'] = tabindex
-            tabindex = tabindex + 1
     #---------------------------------------------------------------------------
     class Meta(object):
         model   = News
         fields  = ('title', 'text_block', 'schoolNews', 'siteNews', 'hidden')
         widgets = {
-            'title'     : TextInput(
-                attrs = {'required': '', 'class': 'full_width'}
+            'title': TextInput(
+                attrs = {
+                    'required'  : '',
+                    'class'     : 'full_width'
+                }
             ),
             'text_block': Textarea(
                 attrs = {

@@ -3,81 +3,29 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-<div id="content">
+
+<div id="content" class="little-window-content">
     <div class="border">
-        <div class="title">
-            Не упустите уникальную возможность - войдите!
-        </div>
-        <form action="/login/" method="post">
+        <div class="title">Вход</div>
+        <form action="" method="post">
             {% csrf_token %}
             <ul class="reset input_form">
-                <li class="input_block">
-                    <label for="input_username" class="input_title">
-                        Имя пользователя
-                    </label>
-                    <br>
-                    <input  id="input_username"
-                            type="text"
-                            name="input_username"
-                            size="50" maxlength="16"
-                            tabindex="1"
-                            value="{{ username }}"
-                            required
-                            placeholder="admin">
-                    {% if error %}
-                        <span class="error_message">
-                            Неверный логин или пароль. Попробуйте еще раз
-                        </span>
-                    {% endif %}
-                    <div class="comment">
-                        Еще не зарегистрированы?&nbsp
-                        <a href="/register">
-                            Не все потеряено!
-                        </a>
-                    </div>
-                </li>
-                <li class="input_block">
-                    <label for="input_password" class="input_title">
-                        Пароль
-                    </label>
-                    <br>
-                    <input  id="input_password"
-                            type="password"
-                            name="input_password"
-                            size="50"
-                            maxlength="128"
-                            tabindex="2"
-                            required
-                            placeholder="******">
-                    <div class="comment">
-                        Забыли пароль? Вспоминайте!
-                    </div>
-                </li>
+                {% for field in form %}
+                    <li class="input_block">
+                        {% if field.label %}
+                            {{ field.label_tag }}
+                            <br>
+                        {% endif %}
+                        {{ field }}
+                    </li>
+                {% endfor %}
             </ul>
-            <!--
-            <br>
-            <ul class="reset input_form">
-                <li class="input_block">
-                <input  type="checkbox"
-                        id="remember_me"
-                        name="remember_me"
-                        checked="checked"
-                        value="1"
-                        tabindex="5">
-                    <label for="remember_me" class="input_title">
-                        Запомнить меня
-                    </label>
-                    <div class="comment">
-                        Не используйте, если это не ваш компьютер. Вообще отойдите от него.
-                    </div>
-                </li>
-            </ul>
-            -->
             <br>
             <fieldset class="submit">
-                <input type="submit" value="Войти" tabindex="10">
+                <input type="submit" value="Вход" tabindex="10">
             </fieldset>
         </form>
     </div>
 </div>
+
 {% endblock %}

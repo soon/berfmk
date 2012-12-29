@@ -44,7 +44,7 @@
                             {{ field.label_tag }}{{ field }}
                         {% endif %}
                     </li>
-            {% endfor %}
+                {% endfor %}
             </ul>
             <br>
             <fieldset class="submit">

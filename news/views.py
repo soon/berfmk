@@ -61,7 +61,7 @@ class NewsView(DetailView):
         if object.hidden and not self.request.user.has_perm('news.view_hidden'):
             # TODO soon
             # Сделать нормальную страницу, оповещающую об отсутствии прав
-            raise Http404
+            raise Http404()
         return object
 #-------------------------------------------------------------------------------
 class NewsUpdate(UpdateView):

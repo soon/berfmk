@@ -47,7 +47,7 @@ header
  *                              USERPANEL
  * --------------------------------------------------------------------------- *
  */
- #userpanel
+#userpanel
 {
     background              : url(../images/userpanel/userpanel.png) repeat-x;
     height                  : 32px;
@@ -878,6 +878,14 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
+#content.little-window-content
+{
+    width                   : 600px;
+    min-width               : 0px;
+}
+/*
+ * --------------------------------------------------------------------------- *
+ */
 #content .button
 {
     text-align              : right;
@@ -1194,7 +1202,7 @@ header
 #content > .border > form > ul.input_form
 {
     position                : relative;
-    left                    : 20px;
+    left                    : 15px;
 }
 /*
  * --------------------------------------------------------------------------- *

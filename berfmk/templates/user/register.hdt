@@ -3,121 +3,29 @@
 {% block title %}Регистрация{% endblock %}
 
 {% block content %}
-<div id="content">
+
+<div id="content" class="little-window-content">
     <div class="border">
-        <div class="title">
-            Не упустите уникальную возможность - зарегистрируйтесь!
-        </div>
-        <form action="/register/" method="post">
+        <div class="title">Регистрация</div>
+        <form action="" method="post">
             {% csrf_token %}
             <ul class="reset input_form">
-                <li class="input_block">
-                    <label for="input_username" class="input_title">
-                        Имя пользователя
-                    </label>
-                    <br>
-                    <input  id="input_username"
-                            type="text"
-                            name="input_username"
-                            size="50"
-                            maxlength="16"
-                            tabindex="1"
-                            required
-                            value="{{ username }}"
-                            placeholder="admin">
-                    {% if errors.username %}
-                        <span class="error_message">
-                            Некорректное имя
-                        </span>
-                    {% elif errors.username_is_already_used %}
-                        <span class="error_message">
-                            Это имя уже используется 
-                        </span>
-                    {% endif %}
-                    <br>
-                    <span class="comment">
-                        Минимальное количество символов - 4, максимальное - 16.
-                        <br>
-                        Допустимые символы: A-Z, a-z, 0-9, _(нижнее
-                                подчеркивание)
-                    </span>
-                </li>
-                <li class="input_block">
-                    <label for"input_email" class="input_title">
-                        E-mail
-                    </label>
-                    <br>
-                    <input  id="input_email"
-                            type="email"
-                            name="input_email"
-                            size="50"
-                            maxlength="75"
-                            tabindex="2"
-                            required
-                            value="{{ email }}"
-                            placeholder="cheshire@cat.com">
-                    {% if errors.email %}
-                        <span class="error_message">
-                            Некорректный e-mail
-                        </span>
-                    {% elif errors.email_is_already_used %}
-                        <span class="error_message">
-                            Этот e-mail уже используется
-                        </span>
-                    {% endif %}
-                    <br>
-                    <span class="comment">
-                        <del>На указанный e-mail будет отправлено письмо с подтверждением.</del><br>
-                        Враки. Отправим чуть позже.
-                    </span>
-                <li class="input_block">
-                    <label for="input_password" class="input_title">
-                        Пароль
-                    </label>
-                    <br>
-                    <input  id="input_password"
-                            type="password"
-                            name="input_password"
-                            size="50"
-                            maxlength="128"
-                            tabindex="3"
-                            required
-                            placeholder="******">
-                    {% if errors.password %}
-                        <span class="error_message">
-                            Некорректный пароль
-                        </span>
-                    {% endif %}
-                    <br>
-                    <span class="comment">
-                        Минимальное количество символов - 6, максимальное - 128.
-                    </span>
-                </li>
-                <li class="input_block">
-                    <label for="input_password_repeat" class="input_title">
-                        Повторите пароль
-                    </label>
-                    <br>
-                    <input  id="input_password_repeat"
-                            type="password"
-                            name="input_password_repeat"
-                            size="50"
-                            maxlength="128"
-                            tabindex="4"
-                            required
-                            placeholder="******">
-                    {% if errors.password_repeat %}
-                        <span class="error_message">
-                            Пароли не совпадают
-                        </span>
-                    {% endif %}
-                </li>
+                {% for field in form %}
+                    <li class="input_block">
+                        {% if field.label %}
+                            {{ field.label_tag }}
+                            <br>
+                        {% endif %}
+                        {{ field }}
+                    </li>
+                {% endfor %}
             </ul>
             <br>
             <fieldset class="submit">
-                <input type="submit" value="Поехали!" tabindex="10">
+                <input type="submit" value="Регистрация" tabindex="10">
             </fieldset>
         </form>
     </div>
 </div>
+
 {% endblock %}

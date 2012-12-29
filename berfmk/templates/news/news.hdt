@@ -1,6 +1,11 @@
 {% extends "main.hdt" %}
 
-{% block title %}Новости{{ direction }}: Страница {{ news.number }}{% endblock %}
+{% block title %}
+    Новости{{ direction }}
+    {% if news.number %}
+        : Страница {{ news.number }}
+    {% endif %}
+{% endblock %}
 
 {% load markdown_to_html %}
 

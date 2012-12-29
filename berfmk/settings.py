@@ -1,20 +1,20 @@
 # Django settings for berfmk project.
 import os.path
-from django_settings import settings
+from django_settings.settings import *
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = settings.DEBUG
+# DEBUG = settings.DEBUG
 
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = settings.ADMINS
+# ADMINS = settings.ADMINS
 
-MANAGERS = settings.MANAGERS
+# MANAGERS = settings.MANAGERS
 
-DATABASES = settings.DATABASES
+# DATABASES = settings.DATABASES
 
-SECRET_KEY = settings.SECRET_KEY
+# SECRET_KEY = settings.SECRET_KEY
 
 LOGIN_URL = '/login/'
 
