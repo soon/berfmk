@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
 from django.conf.urls   import patterns, include, url
+from django.views.generic import RedirectView
 #-------------------------------------------------------------------------------
 from news.views         import NewsList
 from accounts.views     import RegisterView, LoginView
@@ -20,6 +21,10 @@ urlpatterns = patterns(
     # url(r'^register/$', 'accounts.views.register'),
     url(r'^login/$', LoginView.as_view()),
     url(r'^register/$', RegisterView.as_view()),
+
+    # Workaroud
+    url(r'^users/.*$', RedirectView.as_view(url = '/')),
+
     # Examples:
     # url(r'^$', 'berfmk.views.home', name='home'),
     # url(r'^berfmk/', include('berfmk.foo.urls')),

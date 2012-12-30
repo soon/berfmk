@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms  import UserCreationForm, AuthenticationForm
 #-------------------------------------------------------------------------------
 from accounts.models            import UserProfile
-from berfmk.forms               import MyModelForm, MyAuthenticationForm
+from berfmk.forms               import MyModelForm
 from captcha.forms              import ReCaptchaForm, ReCaptchaModelForm
 #-------------------------------------------------------------------------------
 class RegisterForm(UserCreationForm, ReCaptchaModelForm):

@@ -7,7 +7,7 @@ from django.utils.translation   import ugettext_lazy as _
 #-------------------------------------------------------------------------------
 from captcha.widgets            import ReCaptcha
 from recaptcha.client           import captcha as rcaptcha
-from berfmk.forms               import MyModelForm
+from berfmk.forms               import MyModelForm, MyForm
 #-------------------------------------------------------------------------------
 class ReCaptchaField(forms.CharField):
     default_error_messages = {
@@ -35,7 +35,7 @@ class ReCaptchaField(forms.CharField):
             )
         return values[0]
 #-------------------------------------------------------------------------------
-class ReCaptchaForm(forms.Form):
+class ReCaptchaForm(MyForm):
     recaptcha = ReCaptchaField(
         error_messages = {
             'required'  : u'Это поле должно быть заполнено',
