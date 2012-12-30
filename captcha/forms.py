@@ -11,7 +11,7 @@ from berfmk.forms               import MyModelForm, MyForm
 #-------------------------------------------------------------------------------
 class ReCaptchaField(forms.CharField):
     default_error_messages = {
-      'captcha_invalid': _(u'Invalid captcha')
+      'invalid'   : u'Invalid captcha'
     }
     #---------------------------------------------------------------------------
     def __init__(self, *args, **kwargs):
@@ -31,7 +31,7 @@ class ReCaptchaField(forms.CharField):
         )
         if not check_captcha.is_valid:
             raise forms.util.ValidationError(
-                self.error_messages['captcha_invalid']
+                self.error_messages['invalid']
             )
         return values[0]
 #-------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ class ReCaptchaForm(MyForm):
     recaptcha = ReCaptchaField(
         error_messages = {
             'required'  : u'Это поле должно быть заполнено',
-            'invalid'   : u'Указанное значение неверно'
+            'invalid'   : u'Капча разгадана неверно'
         }
     )
     #---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ class ReCaptchaModelForm(MyModelForm):
     recaptcha = ReCaptchaField(
         error_messages = {
             'required'  : u'Это поле должно быть заполнено',
-            'invalid'   : u'Указанное значение неверно'
+            'invalid'   : u'Капча разгадана неверно'
         }
     )
     #---------------------------------------------------------------------------

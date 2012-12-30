@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
-from django.forms               import ModelForm, Form
+from django.forms import ModelForm, Form
 #-------------------------------------------------------------------------------
 class MyForm(Form):
     def __init__(self, *args, **kwargs):
@@ -8,7 +8,6 @@ class MyForm(Form):
 
         tabindex = 1
         for field in self.fields:
-            print self.fields[field].widget, tabindex
             self.fields[field].widget.attrs['tabindex'] = tabindex
             tabindex += 1
     #---------------------------------------------------------------------------
@@ -23,9 +22,7 @@ class MyModelForm(ModelForm):
 
         tabindex = 1
         for field in self.fields:
-            print self.fields[field].widget, tabindex
             self.fields[field].widget.attrs['tabindex'] = tabindex
-            print self.fields[field].widget.attrs['tabindex'], tabindex
             tabindex += 1
     #---------------------------------------------------------------------------
     def exclude_fields(self, fields):

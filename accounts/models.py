@@ -19,7 +19,7 @@ class UserProfile(models.Model):
 #-------------------------------------------------------------------------------
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        group = Group.objects.get(name = 'Пользователь')
+        group = Group.objects.get(name = u'Пользователь')
         user = UserProfile.objects.create(user = instance, group = group)
         group.user_set.add(instance)
 #-------------------------------------------------------------------------------

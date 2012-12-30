@@ -1325,9 +1325,12 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > .error_message
+#content > .border > form .errors
 {
-    margin-left             : 20px;
+    margin-top              : 10px;
+    margin-left             : 5px;
+    font-size               : 15px;
+    text-decoration         : none;
     color                   : #FF2400;
 }
 /*

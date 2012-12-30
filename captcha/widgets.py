@@ -15,7 +15,8 @@ class ReCaptcha(widgets.Widget):
         return mark_safe(
             u'%s' % my_displayhtml(
                 settings.RECAPTCHA_PUBLIC_KEY,
-                tabindex = self.attrs['tabindex']
+                tabindex = self.attrs['tabindex'],
+                required = 'true'
             )
         )
     #---------------------------------------------------------------------------
