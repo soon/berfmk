@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-#-------------------------------------------------------------------------------
-from django.conf.urls   import patterns, include, url
+
+from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
-#-------------------------------------------------------------------------------
-from news.views         import NewsList
-from accounts.views     import RegisterView, LoginView
-#-------------------------------------------------------------------------------
+
+from news.views import NewsList
+from accounts.views import RegisterView, LoginView
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -15,15 +15,13 @@ urlpatterns = patterns(
     url(r'^$', NewsList.as_view(), {'direction': '', 'page': '1'}),
     url(r'^news/', include('news.urls')),
     url(r'^forum/', include('forum.urls')),
-    url(r'^art/(?P<name>.+)/$', 'art.views.art_page'),
-    # url(r'^login/$', 'accounts.views.login'),
+    # url(r'^art/(?P<name>.+)/$', 'art.views.art_page'),
     url(r'^logout/$', 'accounts.views.logout'),
-    # url(r'^register/$', 'accounts.views.register'),
     url(r'^login/$', LoginView.as_view()),
     url(r'^register/$', RegisterView.as_view()),
 
     # Workaroud
-    url(r'^users/.*$', RedirectView.as_view(url = '/')),
+    url(r'^users/.*$', RedirectView.as_view(url='/')),
 
     # Examples:
     # url(r'^$', 'berfmk.views.home', name='home'),
@@ -35,4 +33,3 @@ urlpatterns = patterns(
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
-#-------------------------------------------------------------------------------

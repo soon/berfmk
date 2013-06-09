@@ -33,7 +33,7 @@
                 </div>
                 <div class="content_html_format">
                     {% autoescape off %}
-                        {{ n.text_block|force_escape|markdown_to_html }}
+                        {{ n.text_block|markdown_to_html }}
                     {% endautoescape %}
                 </div>
                 <ul class="bottom reset">
@@ -79,7 +79,7 @@
             </div>
             <div class="content_html_format">
                 {% autoescape off %}
-                    {{ n.text_block|force_escape|markdown_to_html }}
+                    {{ n.text_block|markdown_to_html }}
                 {% endautoescape %}
             </div>
             <!--

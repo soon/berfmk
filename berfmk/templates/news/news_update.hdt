@@ -15,15 +15,19 @@
                 Внимание! Это скрытая новость.
             </div>
         {% endif %}
+        <div class="title" id="id_title_preview"></div>
+        <div id="wmd-preview" class="wmd-panel wmd-preview content_html_format"></div>
+    </div>
+    <!-- <div class="border">
         <div class="title">
             {{ form.title.value }}
         </div>
         <div class="content_html_format">
             {% autoescape off %}
-                {{ form.text_block.value|force_escape|markdown_to_html }}
+                {{ form.text_block.value|markdown_to_html }}
             {% endautoescape %}
         </div>
-    </div>
+    </div> -->
     <div class="border">
         {% if perms.news.change_only_hidden %}
             <div class="notify">
@@ -36,6 +40,7 @@
         <form action="" method="post">
             {% csrf_token %}
             <ul class="reset input_form">
+                <div id="wmd-button-bar"></div>
                 {% for field in form %}
                     <li class="input_block">
                         {% if field.field.widget|is_checkbox %}
@@ -49,9 +54,30 @@
             <br>
             <fieldset class="submit">
                 <button type="submit" name="submit" value="1" tabindex="10">Сохранить</button>
-                <button type="submit" name="preview" value="1" tabindex="11">Предпросмотр</button>
+                <!-- <button type="submit" name="preview" value="1" tabindex="11">Предпросмотр</button> -->
             </fieldset>
         </form>
     </div>
+    <script type="text/javascript">
+        update_preview('id_title_preview', 'id_title', 'Заголовок');
+
+        document.getElementById("id_title").setAttribute("onkeydown", "update_preview('id_title_preview', 'id_title', 'Заголовок')");
+        document.getElementById("id_title").setAttribute("onkeyup", "update_preview('id_title_preview', 'id_title', 'Заголовок')");
+    </script>
+    <script type="text/javascript">
+        (function () {
+            var converter = Markdown.getSanitizingConverter();
+
+            converter.hooks.chain("preBlockGamut", function (text, rbg) {
+                return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+                    return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+                });
+            });
+
+            var editor = new Markdown.Editor(converter);
+
+            editor.run();
+        })();
+    </script>
 </div>
 {% endblock %}

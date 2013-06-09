@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-#-------------------------------------------------------------------------------
+
 from django.contrib.auth.decorators import user_passes_test
-#-------------------------------------------------------------------------------
+
 def any_permission_required(function = None, perms = [], login_url = None):
     def wrapper(*args, **kwargs):
         actual_decorator = user_passes_test(
@@ -12,4 +12,3 @@ def any_permission_required(function = None, perms = [], login_url = None):
             return actual_decorator(function)
         return actual_decorator
     return wrapper
-#-------------------------------------------------------------------------------

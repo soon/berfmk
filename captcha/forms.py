@@ -1,24 +1,25 @@
 # -*- coding: utf-8 -*-
-#-------------------------------------------------------------------------------
-from django.conf                import settings
-from django                     import forms
-from django.utils.encoding      import smart_unicode
-from django.utils.translation   import ugettext_lazy as _
-#-------------------------------------------------------------------------------
-from captcha.widgets            import ReCaptcha
-from recaptcha.client           import captcha as rcaptcha
-from berfmk.forms               import MyModelForm, MyForm
-#-------------------------------------------------------------------------------
+
+from django.conf import settings
+from django import forms
+from django.utils.encoding import smart_unicode
+from django.utils.translation import ugettext_lazy as _
+
+from captcha.widgets import ReCaptcha
+from recaptcha.client import captcha as rcaptcha
+from berfmk.forms import MyModelForm, MyForm
+
+
 class ReCaptchaField(forms.CharField):
     default_error_messages = {
       'invalid'   : u'Invalid captcha'
     }
-    #---------------------------------------------------------------------------
+
     def __init__(self, *args, **kwargs):
         self.widget = ReCaptcha
         self.required = True
         super(ReCaptchaField, self).__init__(*args, **kwargs)
-    #---------------------------------------------------------------------------
+
     def clean(self, values):
         super(ReCaptchaField, self).clean(values[1])
         recaptcha_challenge_value = smart_unicode(values[0])
@@ -30,32 +31,31 @@ class ReCaptchaField(forms.CharField):
             {}
         )
         if not check_captcha.is_valid:
-            raise forms.util.ValidationError(
-                self.error_messages['invalid']
-            )
+            raise forms.util.ValidationError(self.error_messages['invalid'])
         return values[0]
-#-------------------------------------------------------------------------------
+
+
 class ReCaptchaForm(MyForm):
     recaptcha = ReCaptchaField(
-        error_messages = {
-            'required'  : u'Это поле должно быть заполнено',
-            'invalid'   : u'Капча разгадана неверно'
+        error_messages={
+            'required': u'Это поле должно быть заполнено',
+            'invalid': u'Капча разгадана неверно'
         }
     )
-    #---------------------------------------------------------------------------
+
     def __init__(self, *args, **kwargs):
         super(ReCaptchaForm, self).__init__(*args, **kwargs)
         self.fields['recaptcha'].label = ''
-#-------------------------------------------------------------------------------
+
+
 class ReCaptchaModelForm(MyModelForm):
     recaptcha = ReCaptchaField(
-        error_messages = {
-            'required'  : u'Это поле должно быть заполнено',
-            'invalid'   : u'Капча разгадана неверно'
+        error_messages={
+            'required': u'Это поле должно быть заполнено',
+            'invalid': u'Капча разгадана неверно'
         }
     )
-    #---------------------------------------------------------------------------
+
     def __init__(self, *args, **kwargs):
         super(ReCaptchaModelForm, self).__init__(*args, **kwargs)
         self.fields['recaptcha'].label = ''
-#-------------------------------------------------------------------------------

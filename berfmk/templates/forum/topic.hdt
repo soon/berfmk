@@ -7,7 +7,7 @@
 
 {% block content %}
 <div id="content">
-    <div class="border" id="post{{ first_post.id }}">
+    <!-- <div class="border" id="post{{ first_post.id }}">
         <div class="title">
             {# TODO #}
             {# <a href="{{ first_post.get_absolute_url }}"> #}
@@ -34,18 +34,15 @@
                 </ul>
             </li>
         </ul>
-    </div>
-    {% for post in posts %}
+    </div> -->
+    {% for post in post_list %}
         <div class="border" id="post{{ post.id }}">
                 <div class="title">
                     {# TODO #}
-                    {# <a href="{{ post.get_absolute_url }}"> #}
-
-                        {# {% if not forloop.first %} #}
-                            #{{ posts.number|add:"-1"|product:"10"|add:forloop.counter }} Re:
-                        {# {% endif %} #}
+                    <a href="{{ topic.get_absolute_url }}page/{{ page_obj.number }}/#post{{ post.id }}">
+                        #{{ page_obj.number|add:"-1"|product:"10"|add:forloop.counter }} Re:
                         {{ topic.title }}
-                    {# </a> #}
+                    </a>
                 </div>
                 <div class="content_html_format">
                     {% autoescape off %}
@@ -69,57 +66,56 @@
             </ul>
         </div>
     {% endfor %}
-    {% if posts.paginator.num_pages > 1 %}
+    {% if page_obj.paginator.num_pages > 1 %}
         <div id="page-nav">
             <div id="next-prev">
-                    {% if posts.has_previous %}
-                        <a href="{{ topic.get_absolute_url }}page/{{ posts.previous_page_number }}">←</a>
+                    {% if page_obj.has_previous %}
+                        <a href="{{ topic.get_absolute_url }}page/{{ page_obj.previous_page_number }}">←</a>
                     {% endif %}
-                    {% if posts.has_next %}
-                        <a href="{{ topic.get_absolute_url }}page/{{ posts.next_page_number }}">→</a>
+                    {% if page_obj.has_next %}
+                        <a href="{{ topic.get_absolute_url }}page/{{ page_obj.next_page_number }}">→</a>
                     {% endif %}
             </div>
         </div>
     {% endif %}
-    {% if perms.forum.add_post %}
-        <div class="border">
-            <div class="title">
-                Новое сообщение
-            </div>
-            <form action="{{ topic.get_absolute_url }}add-post/" method="post">
+    {% if request.user.is_authenticated %}
+        <div class="border" id="post_preview">
+            <div class="title">Новое сообщение</div>
+            <div id="wmd-preview" class="wmd-panel wmd-preview content_html_format"></div>
+        </div>
+        <div class="border" id="post_create">
+            <form action="" method="post">
                 {% csrf_token %}
                 <ul class="reset input_form">
-                    <li class="input_block">
-                        <label for="input_text_block" class="input_title">
-                            Текст сообщения
-                        </label>
-                        <br>
-                        <textarea   id="input_text_block"
-                                    class="full_width"
-                                    type="textarea"
-                                    name="input_body"
-                                    maxlength="1000"
-                                    rows = "8"
-                                    tabindex="2"
-                                    required
-                                    placeholder="Не более 1000 символов">{% firstof post_body post.body %}</textarea>
-                        {% if errors.body %}
-                            <div class="error_message">
-                                Слишком длинное сообщение
-                            </div>
-                        {% endif %}
-                    </li>
+                    <div id="wmd-button-bar"></div>
+                    {% for field in form %}
+                        <li class="input_block">
+                            {{ field.label_tag }}{{ field }}
+                        </li>
+                {% endfor %}
                 </ul>
                 <br>
                 <fieldset class="submit">
-                    <input type="submit" value="Добавить" tabindex="10">
-                    <input  type="submit"
-                            value="Предпросмотр"
-                            tabindex="11"
-                            formaction="{{ topic.get_absolute_url }}add-post/preview/">
+                    <button type="submit" tabindex="10">Опубликовать</button>
                 </fieldset>
             </form>
         </div>
+        <script type="text/javascript">
+            (function () {
+                var converter = Markdown.getSanitizingConverter();
+
+                converter.hooks.chain("preBlockGamut", function (text, rbg) {
+                    return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+                        return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+                    });
+                });
+
+                var editor = new Markdown.Editor(converter);
+
+                editor.run();
+            })();
+        </script>
     {% endif %}
+
 </div>
 {% endblock %}

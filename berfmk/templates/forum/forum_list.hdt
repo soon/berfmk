@@ -1,0 +1,57 @@
+{% extends "main.hdt" %}
+
+{% block title %}Форум{% endblock %}
+
+{% load humanize %}
+
+{% block content %}
+<div id="content">
+    {% for forum in forum_list %}
+        <div class="border">
+            <div class="title">
+                <a href="{{ forum.get_absolute_url }}">{{ forum.title }}</a>
+            </div>
+            {% for section in forum.section_set.all %}
+                <div class="line">
+                    <a href="{{ section.get_absolute_url }}">
+                        {{ section.title }}
+                    </a>
+                    {% with section.get_last_post as post %}
+                        <span class="info">
+                            {% if post %}
+                                <span class="date">
+                                    {{ post.created|naturaltime }}
+                                </span> от <span class="username">
+                                    {{ post.creator }}
+                                </span> <a class="goto" href="{{ post.topic.get_absolute_url }}">→</a>
+                            {% else %}
+                                Нет сообщений
+                            {% endif %}
+                        </span>
+                    {% endwith %}
+                    {% for sub_section in section.sub_section_set.all %}
+                        <div class="line">
+                            <a href="{{ sub_section.get_absolute_url }}">
+                                {{ sub_section.title }}
+                            </a>
+                            {% with sub_section.get_last_post as post %}
+                                <span class="info">
+                                    {% if post %}
+                                        <span class="date">
+                                            {{ post.created|naturaltime }}
+                                        </span> от <span class="username">
+                                            {{ post.creator }}
+                                        </span> <a class="goto" href="{{ post.get_absolute_url }}">→</a>
+                                    {% else %}
+                                        Нет сообщений
+                                    {% endif %}
+                                </span>
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

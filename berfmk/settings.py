@@ -112,6 +112,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'berfmk.urls'
 
+# AUTHENTICATION_BACKENDS = ("backends.EmailAuthBackend", )
+
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'berfmk.wsgi.application'
 

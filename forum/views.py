@@ -1,289 +1,162 @@
 # -*- coding: utf-8 -*-
-#-------------------------------------------------------------------------------
-from django.shortcuts               import redirect, get_object_or_404
-from django.views.generic.simple    import direct_to_template
-from django.conf                    import settings
-from django.http                    import Http404
-from django.db.models               import Q
-from django.core.exceptions         import ObjectDoesNotExist
-from django.core.paginator          import Paginator, EmptyPage
-#-------------------------------------------------------------------------------
-from forum.models                   import Forum, Section, Sub_section, Topic
-from forum.models                   import Post
-from forum.utils                    import create_and_get_topic
-from forum.utils                    import create_and_get_post
-from berfmk.utils                   import get_number_from_param_or_404
-#-------------------------------------------------------------------------------
-#               defs
-# forums........................return all forums
-# sections......................return all sections in forum
-# topics.+---.(got Section).---.return all sub_sections and topics in section
-#        |
-#        +-.(got Sub_section).-.return all topics in sub_section
-# posts.........................return all posts in topic
-#-------------------------------------------------------------------------------
-#               templates
-# forum_main....................show all forums
-# forum.........................show all sections in forum
-# section.......................show all sub-sections and topics in section
-# sub_section...................show all topics in sub_section
-# topic.........................show all posts in topic
-#-------------------------------------------------------------------------------
-def forums(request):
-    return direct_to_template(
-        request,
-        'forum/forum_main.hdt', {
-            'forums': Forum.objects.all()
-        }
-    )
-#-------------------------------------------------------------------------------
-def sections(request, forum):
-    f = get_object_or_404(Forum, address = forum)
-    return direct_to_template(
-        request,
-        'forum/forum.hdt', {
-            'sections'  : f.section_set.all(),
-            'forum'     : f
-        }
-    )
-#-------------------------------------------------------------------------------
-def topics(request, forum, section):
-    f = get_object_or_404(Forum, address = forum)
-    try:
-        s = f.section_set.get(address = section)
-        topics = sorted(
-            s.topic_set.filter(sub_section = None),
-            key = lambda t: t.get_last_post().created,
+
+from django.views.generic import ListView, DetailView, FormView
+from django.http import Http404
+
+from berfmk.views.generic import DetailAndListView, DetailAndListAndCreateView
+from forum.forms import PostForm
+from forum.models import Forum, Section, SubSection, Topic, Post
+
+
+class ForumList(ListView):
+    """
+    Class for showing all forums
+
+    """
+    model = Forum
+
+    template_name = 'forum/forum_list.hdt'
+
+
+class ForumDetail(DetailView):
+    """
+    Class for showing detailed forum
+
+    """
+    model = Forum
+    slug_field = 'address'
+    slug_url_kwarg = 'forum'
+
+    template_name = 'forum/forum_detail.hdt'
+
+
+class SectionDetail(DetailAndListView):
+    """
+    Class for showing detailed section
+
+    Also it show a list of topics in the section
+
+    """
+    single_model = Section
+    single_slug_field = 'address'
+    single_slug_url_kwarg = 'section'
+
+    multiple_model = Topic
+
+    template_name = 'forum/section_detail_and_topic_list.hdt'
+
+
+    def dispatch(self, *args, **kwargs):
+        """
+        Check for passed forum's address, throws Http404 if failed
+
+        """
+        response = super(
+            SectionDetail,
+            self
+        ).dispatch(*args, **kwargs)
+
+        if not self.object.forum.address == kwargs['forum']:
+            raise Http404()
+
+        return response
+
+    def get_multiple_queryset(self):
+        """
+        Returns all topics from the section sorted by the last post in topic
+
+        """
+        return sorted(
+            self.get_object().topic_set.filter(sub_section = None),
+            key = lambda t: t.get_last_post().id,
             reverse = True
         )
-        return direct_to_template(
-            request,
-            'forum/section.hdt', {
-                'topics'        : topics,
-                'sub_sections'  : s.sub_section_set.all(),
-                'section'       : s,
-                'forum'         : f
-            }
-        )
-    except ObjectDoesNotExist:
-        ss = get_object_or_404(Sub_section, address = section)
-        topics = sorted(
-            ss.topic_set.exclude(sub_section = None),
-            key = lambda t: t.get_last_post().created,
+
+
+# Similar to SectionDetail
+# Think about it
+class SubSectionDetail(DetailAndListView):
+    """
+    Class for showing detailed sub_secton
+
+    Also shows a list of topics in the sub_section
+
+    """
+    single_model = SubSection
+    single_slug_field = 'address'
+    single_slug_url_kwarg = 'sub_section'
+
+    multiple_model = Topic
+
+    template_name = 'forum/sub_section_detail_and_topic_list.hdt'
+
+
+    def dispatch(self, *args, **kwargs):
+        """
+        Check for passed forum's and section's address, throws Http404 if failed
+
+        """
+        response = super(
+            SubSectionDetail,
+            self
+        ).dispatch(*args, **kwargs)
+
+        if (not self.object.section.address == kwargs['section'] or
+           not self.object.section.forum.address == kwargs['forum']):
+            raise Http404()
+
+        return response
+
+    def get_multiple_queryset(self):
+        """
+        Returns all topics in the sub_section sorted by the last post in topic
+
+        """
+        return sorted(
+            self.get_object().topic_set.exclude(sub_section = None),
+            key = lambda t: t.get_last_post().id,
             reverse = True
         )
-        return direct_to_template(
-            request,
-            'forum/sub_section.hdt', {
-                'topics'        : topics,
-                'sub_section'   : ss,
-                'forum'         : f
-            }
-        )
-#-------------------------------------------------------------------------------
-def posts(request, forum, section, topic, page):
-    topic = get_number_from_param_or_404(topic)
-    page = get_number_from_param_or_404(page)
 
-    f = get_object_or_404(Forum, address = forum)
-    try:
-        s = f.section_set.get(address = section)
-        t = get_object_or_404(
-            s.topic_set.filter(sub_section = None),
-            id = topic
-        )
-        p = t.post_set.all()
-        first_post = p[0];
 
-        paginator = Paginator(p[1:], 10)
-        try:
-            p = paginator.page(page)
-        except EmptyPage:
-            p = paginator.page(paginator.num_pages)
+class TopicDetail(DetailAndListAndCreateView):
+    """
+    Class for showing detailed topic
 
-        # if p.count() <= (page - 1) * 10 and p.count():
-            # raise Http404()
+    Also shows a list of posts in the topic and form for send new post
 
-        return direct_to_template(
-            request,
-            'forum/topic.hdt', {
-                # 'posts'         : p[:10] if page == 1 else \
-                                    # list(p[:1]) + \
-                                    # list(p[(page - 1) * 10:page * 10]),
-                'first_post'    : first_post,
-                'posts'         : p,
-                'topic'         : t,
-                'section'       : s,
-                'forum'         : f
-                # 'page'          : page
-            }
-        )
-    except ObjectDoesNotExist:
-        ss = get_object_or_404(Sub_section, address = section)
-        t = get_object_or_404(ss.topic_set.all(), id = topic)
-        p = t.post_set.all()
-        first_post = p[0];
+    """
+    single_model = Topic
+    single_slug_field = 'pk'
+    single_slug_url_kwarg = 'topic'
 
-        paginator = Paginator(p[1:], 10)
-        try:
-            p = paginator.page(page)
-        except EmptyPage:
-            p = paginator.page(paginator.num_pages)
+    multiple_model = Post
+    paginate_by = 10
 
-        # if p.count() <= (page - 1) * 10 and p.count():
-            # raise Http404()
+    form_class = PostForm
 
-        return direct_to_template(
-            request,
-            'forum/topic.hdt', {
-                # 'posts'         : p[:10] if page == 1 else \
-                                    # list(p[:1]) + \
-                                    # list(p[(page - 1) * 10:page * 10]),
-                'first_post'    : first_post,
-                'posts'         : p,
-                'topic'         : t,
-                'sub_section'   : ss,
-                'section'       : ss.section,
-                'forum'         : f
-                # 'page'          : page
-            }
-        )
-#-------------------------------------------------------------------------------
-def add_topic(request, forum, section, preview):
-    if not request.user.has_perm('forum.add_topic'):
-        raise Http404()
+    template_name = 'forum/topic.hdt'
 
-    f = get_object_or_404(Forum, address = forum)
-    s, ss = None, None
-    try:
-        s = f.section_set.get(address = section)
-    except ObjectDoesNotExist:
-        ss = get_object_or_404(Sub_section, address = section)
-        s = ss.section
 
-    if request.method == 'POST':
-        errors = {'title': False, 'body': False}
-        
-        title = request.POST['input_title']
-        if len(title) > 64:
-            errors['title'] = True
+    # def get(self, request, *args, **kwargs):
+    #     return super(TopicDetail, self).get(request, *args, **kwargs)
 
-        body = request.POST['input_body']
-        if len(body) > 1000:
-            errors['body'] = True
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.creator = self.request.user
+        instance.topic = self.get_object()
+        return super(TopicDetail, self).form_valid(instance)
 
-        if not True in errors.values():
-            if not preview:
-                try:
-                    t = create_and_get_topic(
-                        title   = title,
-                        creator = request.user,
-                        section = s if ss is None else ss,
-                        body    = body
-                    )
-                except ValueError:
-                    # soon(30.08.12, 12:42)
-                    # FIXME
-                    # Обработать нормально эту ситуацию
-                    raise Http404() 
-                return redirect(t.get_absolute_url())
-            else:
-                t = Topic(
-                    title       = title,
-                    creator     = request.user,
-                    section     = s,
-                    sub_section = ss,
-                )
-                p = Post(
-                    creator = t.creator,
-                    topic = t,
-                    body = body
-                )
-                return direct_to_template(
-                    request,
-                    'forum/add_topic.hdt', {
-                        'topic'     : t,
-                        'post'      : p,
-                        'forum'     : f,
-                        'section'   : s
-                    }
-                )
-        return direct_to_template(
-            request,
-            'forum/add_topic.hdt', { 
-                'topic_title'   : title,
-                'post_body'     : text_block,
-                'errors'        : errors
-            }
-        )
-    else:
-        return direct_to_template(
-            request,
-            'forum/add_topic.hdt', {
-                'forum'     : f,
-                'section'   : s if ss is None else ss
-            }
-        )
-#-------------------------------------------------------------------------------
-def add_post(request, forum, section, topic, preview):
-    if not request.user.has_perm('forum.add_post'):
-        raise Http404()
+    def get_multiple_queryset(self):
+        """
+        Returns all posts in the topic
 
-    topic = get_number_from_param_or_404(topic)
+        """
+        return self.get_object().post_set.all()
 
-    f = get_object_or_404(Forum, address = forum)
-    s, ss = None, None
-    try:
-        s = f.section_set.get(address = section)
-    except ObjectDoesNotExist:
-        ss = get_object_or_404(Sub_section, address = section)
-        s = ss.section
+    def get_success_url(self):
+        """
+        Returns topic's absolute url
 
-    t = get_object_or_404(s.topic_set.all(), id = topic)
-
-    if request.method == 'POST':
-        errors = {'body': False}
-
-        body = request.POST['input_body']
-        if len(body) > 1000:
-            errors['body'] = True
-
-        if not True in errors.values():
-            if not preview:
-                try:
-                    p = create_and_get_post(
-                        creator = request.user,
-                        topic   = t,
-                        body    = body
-                    )
-                except ValueError:
-                    # soon(30.08.12, 12:42)
-                    # FIXME
-                    # Обработать нормально эту ситуацию
-                    raise Http404() 
-                return redirect(p.get_absolute_url())
-            else:
-                p = Post(
-                    creator = request.user,
-                    topic   = t,
-                    body    = body
-                )
-                return direct_to_template(
-                    request,
-                    'forum/add_post.hdt', {
-                        'post'      : p,
-                        'topic'     : t,
-                        'forum'     : f,
-                        'section'   : s
-                    }
-                )
-        return direct_to_template(
-            request,
-            'forum/add_post.hdt', { 
-                'post_body'     : text_block,
-                'errors'        : errors
-            }
-        )
-    else:
-        raise Http404()
-#-------------------------------------------------------------------------------
+        """
+        return self.get_object().get_absolute_url()

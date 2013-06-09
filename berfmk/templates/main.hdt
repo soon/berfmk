@@ -9,13 +9,18 @@
         <meta charset="utf-8">
         <title>Физ Мат Березники | {% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/style.css" type="text/css" media="all" charset="utf-8">
+
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}css/pagedown.css">
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}js/pagedown/Markdown.Converter.js"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}js/pagedown/Markdown.Sanitizer.js"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}js/pagedown/Markdown.Editor.js"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}js/utils.js"></script>
     </head>
     <body>
         <header>
             {% include "header.hdt" %}
         </header>
         {% block content %}{% endblock %}
-
         <footer>
             {% include "footer.hdt" %}
         </footer>

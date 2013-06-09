@@ -1,0 +1,44 @@
+{% extends "main.hdt" %}
+
+{% block title %}Форум: раздел "{{ sub_section.title }}"{% endblock %}
+
+{% load humanize %}
+
+{% block content %}
+<div id="content">
+    {% if perms.forum.add_topic and perms.forum.add_post %}
+        <div class="button">
+            <a href="{{ sub_section.get_absolute_url }}add-topic">
+                Создать новую тему
+            </a>
+        </div>
+    {% endif %}
+    {% if sub_section.topic_set.all %}
+        <div class="border">
+            <div class="title">
+                Темы
+            </div>
+            {% for topic in sub_section.topic_set.all %}
+                <div class="line">
+                    <a href="{{ topic.get_absolute_url }}">
+                        {{ topic.title }}
+                    </a>
+                    {% with topic.get_last_post as post %}
+                        <span class="info">
+                            {% if post %}
+                                <span class="date">
+                                    {{ post.created|naturaltime }}
+                                </span> от <span class="username">
+                                    {{ post.creator }}
+                                </span>
+                            {% else %}
+                                Нет сообщений
+                            {% endif %}
+                        </span>
+                    {% endwith %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

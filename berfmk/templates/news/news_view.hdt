@@ -19,7 +19,7 @@
         </div>
         <div class="content_html_format">
             {% autoescape off %}
-                {{ news.text_block|force_escape|markdown_to_html }}
+                {{ news.text_block|markdown_to_html }}
             {% endautoescape %}
         </div>
         <ul class="bottom reset">
