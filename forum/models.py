@@ -22,9 +22,10 @@ class BaseForumModel(models.Model):
     A base model class with title, address and order fields
 
     """
-    title = models.CharField(max_length=64)
-    address = models.CharField(max_length=32)
-    order = models.PositiveIntegerField(default=0)
+    title = models.CharField(max_length=64, verbose_name=u'Заголовок')
+    address = models.CharField(max_length=32, verbose_name=u'Адрес')
+    order = models.PositiveIntegerField(default=0,
+                                        verbose_name=u'Порядковый номер')
 
     class Meta:
         abstract = True

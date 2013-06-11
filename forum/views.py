@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, FormView, CreateView
 from django.http import Http404
+from django.contrib.auth.decorators import permission_required
+from django.utils.decorators import method_decorator
 
 from berfmk.views.generic import DetailAndListView, DetailAndListAndCreateView
-from forum.forms import PostForm
+from forum.forms import ForumForm, PostForm
 from forum.models import Forum, Section, SubSection, Topic, Post
 
 
@@ -28,6 +30,20 @@ class ForumDetail(DetailView):
     slug_url_kwarg = 'forum'
 
     template_name = 'forum/forum_detail.hdt'
+
+
+class ForumCreate(CreateView):
+    """
+    A class provides operations for creating a new forum
+
+    """
+    form_class = ForumForm
+
+    template_name = 'forum/forum_create.hdt'
+
+    @method_decorator(permission_required('forum.add_forum'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ForumCreate, self).dispatch(request, *args, **kwargs)
 
 
 class SectionDetail(DetailAndListView):
@@ -123,7 +139,7 @@ class TopicDetail(DetailAndListAndCreateView):
     """
     Class for showing detailed topic
 
-    Also shows a list of posts in the topic and form for send new post
+    Also shows a list of posts in the topic and form for sending new post
 
     """
     single_model = Topic
@@ -136,10 +152,6 @@ class TopicDetail(DetailAndListAndCreateView):
     form_class = PostForm
 
     template_name = 'forum/topic.hdt'
-
-
-    # def get(self, request, *args, **kwargs):
-    #     return super(TopicDetail, self).get(request, *args, **kwargs)
 
     def form_valid(self, form):
         instance = form.save(commit=False)

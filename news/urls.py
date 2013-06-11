@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls   import patterns, include, url
+from django.conf.urls import patterns, include, url
 
-from news.views         import NewsList, NewsView, NewsUpdate, NewsCreate
-from news.forms         import NewsForm
-from news.preview       import NewsFormPreview
-from news.utils         import can_add_news
+from news.views import NewsList, NewsView, NewsUpdate, NewsCreate
+from news.forms import NewsForm
+from news.preview import NewsFormPreview
+from news.utils import can_add_news
 
 urlpatterns = patterns(
     '',

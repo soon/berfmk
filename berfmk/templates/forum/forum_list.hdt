@@ -6,6 +6,13 @@
 
 {% block content %}
 <div id="content">
+    {% if perms.forum.add_forum %}
+        <div class="button">
+            <a href="/forum/create/">
+                Создать новый форум
+            </a>
+        </div>
+    {% endif %}
     {% for forum in forum_list %}
         <div class="border">
             <div class="title">

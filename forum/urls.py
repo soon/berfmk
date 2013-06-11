@@ -1,7 +1,7 @@
-from django.conf.urls   import patterns, include, url
+from django.conf.urls import patterns, include, url
 
-from forum.views        import ForumList, ForumDetail, SectionDetail
-from forum.views        import SubSectionDetail, TopicDetail
+from forum.views import (ForumList, ForumDetail, ForumCreate, SectionDetail,
+        SubSectionDetail, TopicDetail)
 
 urlpatterns = patterns(
     '',
@@ -10,6 +10,13 @@ urlpatterns = patterns(
         r'$',
 
         ForumList.as_view()
+    ),
+    url(
+        r'^'
+            r'create/'
+        r'$',
+
+        ForumCreate.as_view()
     ),
     url(
         r'^'
@@ -45,7 +52,7 @@ urlpatterns = patterns(
         TopicDetail.as_view(),
         {'page': 1}
     ),
-        url(
+    url(
         r'^'
             r'(?P<forum>[^/]{1,32})/'
             r'(?P<section>[^/]{1,32})/'
