@@ -1214,7 +1214,7 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block
+#content > .border > form > ul.input_form > li
 {
     color                   : #3A3A3A;
     margin-top              : 10px;
@@ -1222,7 +1222,7 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > label
+#content > .border > form > ul.input_form > li > label
 {
     font-size               : 16px;
     font-weight             : bold;
@@ -1230,13 +1230,14 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > input,
-#content > .border > form > ul.input_form > li.input_block > textarea
+#content > .border > form > ul.input_form > li > input,
+#content > .border > form > ul.input_form > li > textarea
 {
     font-size               : 0.8em;
     padding                 : 4px;
     border                  : 1px solid;
     border-color            : #848484 #C1C1C1 #E1E1E1 #C1C1C1;
+    width                   : 95%;
 
     -webkit-border-radius   : 2px;
     -moz-border-radius      : 2px;
@@ -1247,21 +1248,21 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > .full_width
+#content > .border > form > ul.input_form > li > input[type="checkbox"]
 {
-    width                   : 95%;
+    width                   : 13px;
 }
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > textarea
+#content > .border > form > ul.input_form > li > textarea
 {
     resize                  : vertical;
 }
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > .comment
+#content > .border > form > ul.input_form > li > .comment
 {
     position                : relative;
     top                     : 5px;
@@ -1272,7 +1273,7 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > form > ul.input_form > li.input_block > .comment > a
+#content > .border > form > ul.input_form > li > .comment > a
 {
     color                   : #F15A23;
 }

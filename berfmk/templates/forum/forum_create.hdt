@@ -13,19 +13,7 @@
         </div>
         <form action="" method="post">
             {% csrf_token %}
-            <!-- <ul class="reset input_form">
-                {% for field in form %}
-                    <li class="input_block">
-                        {% if field.field.widget|is_checkbox %}
-                            {{ field }} {{ field.label_tag }}
-                        {% else %}
-                            {{ field.label_tag }}{{ field }}
-                        {% endif %}
-                    </li>
-            {% endfor %}
-            </ul>-->
             <ul class="reset input_form">{{ form.as_ul }}</ul>
-            {# {{ form.as_ul }} #}
             <br>
             <fieldset class="submit">
                 <button type="submit" tabindex="10">Создать</button>

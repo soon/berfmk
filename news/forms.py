@@ -20,14 +20,12 @@ class NewsForm(MyModelForm):
             'title': TextInput(
                 attrs = {
                     'required'  : '',
-                    'class'     : 'full_width'
                 }
             ),
             'text_block': Textarea(
                 attrs = {
                     'required'  : '',
                     'rows'      : 20,
-                    'class'     : 'full_width',
                     'id'        : 'wmd-input',
                     'maxlength' : fields_for_model(
                         News, fields = ('text_block', )

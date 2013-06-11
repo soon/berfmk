@@ -14,7 +14,6 @@ class RegisterForm(UserCreationForm, ReCaptchaModelForm):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'full_width'
             self.fields[field].widget.attrs['required'] = ''
 
     def clean_username(self):
@@ -51,6 +50,5 @@ class LoginForm(AuthenticationForm, ReCaptchaForm):
         self.error_messages['invalid_login'] = u"Введенные данные некорректны"
 
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'full_width'
             self.fields[field].widget.attrs['required'] = ''
 

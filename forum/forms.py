@@ -20,7 +20,6 @@ class PostForm(MyModelForm):
                 attrs = {
                     'required'  : '',
                     'rows'      : 8,
-                    'class'     : 'full_width',
                     'id'        : 'wmd-input',
                 }
             )
