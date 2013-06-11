@@ -1028,30 +1028,35 @@ header
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > .content_html_format > p,
-#content > .border > .content_html_format > h1,
-#content > .border > .content_html_format > h2,
-#content > .border > .content_html_format > h3,
-#content > .border > .content_html_format > h4,
-#content > .border > .content_html_format > h5,
-#content > .border > .content_html_format > h6
+#content > .border > .content_html_format *
 {
-    padding-top             : 5px;
-    padding-bottom          : 5px;
+    padding-top             : 3px;
+    padding-bottom          : 3px;
 }
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > .content_html_format > p
+#content > .border > .content_html_format hr
 {
-    text-indent             : 20px;
+    padding-top             : 0px;
+    padding-bottom          : 0px;
 }
 /*
  * --------------------------------------------------------------------------- *
  */
-#content > .border > .content_html_format > ul
+#content > .border > .content_html_format ol,
+#content > .border > .content_html_format ul
 {
-    margin-left             : 20px;
+    margin-left             : 30px;
+}
+/*
+ * --------------------------------------------------------------------------- *
+ */
+#content > .border > .content_html_format blockquote
+{
+    border-left             : 5px solid #767676;
+    padding                 : 5px;
+    background-color        : #eee;
 }
 /*
  * --------------------------------------------------------------------------- *
