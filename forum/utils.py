@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import warnings
+
+warnings.warn("This module is deprecated since 11.06.13")
+
 from forum.models import Forum, Section, SubSection, Topic, Post
 
 def create_and_get_forum(title, address, order=0):
